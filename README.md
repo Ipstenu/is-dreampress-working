@@ -5,6 +5,8 @@ This code is based on http://www.isvarnishworking.com/ - without ever seeing the
 
 Currently it works, but it has some room to grow
 
+Demo: http://breakwpdh.com/testdreampress.php
+
 		To Do
 		
 		1) This site doesn't look like WP
