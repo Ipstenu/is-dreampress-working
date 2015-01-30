@@ -126,7 +126,7 @@ a:hover {
 #content {
   padding:0 48px 20px;
   text-align: center;
-  width: 75%;
+  width: 90%;
   margin: auto;
 }
 
@@ -158,7 +158,7 @@ a:hover {
 #headers {
   border: solid 1px #000;
   margin: auto;
-  width: 60%;
+  width: 85%;
   table-layout: fixed;
 }
 
@@ -184,7 +184,7 @@ pre {
   margin-right: auto;
   padding: 25px;
   text-align: center;
-  width: 60%;
+  width: 80%;
 }
 
 #footer div {
