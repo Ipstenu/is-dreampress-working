@@ -126,12 +126,14 @@ if (!$_POST) {
 		);
 
 		$default = stream_context_set_default($default_opts);
-		$varnish_headers = get_headers( $varnish_url );
+		$varnish_headers = get_headers( $varnish_url, 1 );
 
 		// If there's a 302 redirect then the get_headers 1 param breaks, so we'll compensate.
 		if ( substr($varnish_headers[0], 9, 3) != '200' ) {
-			$varnish_headers = get_headers( $varnish_headers['Location'] );
+			$varnish_headers = get_headers( $varnish_headers['Location'], 1 );
 		}
+
+		echo $varnish_headers['Location'];
 
 		if ( !isset($varnish_headers['X-Cacheable']) ) {
 
