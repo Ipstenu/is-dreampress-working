@@ -7,13 +7,10 @@ Currently it works, but it has some room to grow
 
 Demo: http://breakwpdh.com/testdreampress.php
 
-		To Do
+##To Do
 		
-		1) This site doesn't look like WP
-		2) Look for known COOKIE PROBLEMS
-		3) Failures
-		4) Not Varnish (i.e. not DreamPress) - Show nameservers
-		5) If cloudflare...
-		6) PHPSessions - explain
-		7) Max-Age 0
-		8) If HTTPS...
+* Look for known COOKIE PROBLEMS
+* Failures
+* Not Varnish (i.e. not DreamPress) - Show nameservers
+* If cloudflare...
+* Max-Age 0
