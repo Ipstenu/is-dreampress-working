@@ -40,27 +40,6 @@ $icon_warning 	= '<i class="fa fa-exclamation-triangle" style="color:#FFD700"></
 $icon_bad		= '<i class="fa fa-bomb" style="color:#FF0000;"></i>';
 
 /*
- * Get File Contents
- *
- * This will be used to parse headers later for WP
-*/
-
-function file_get_contents_curl($url)
-{
-    $ch = curl_init();
-
-    curl_setopt($ch, CURLOPT_HEADER, 0);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-
-    $data = curl_exec($ch);
-    curl_close($ch);
-
-    return $data;
-}
-
-/*
  * The Form
  *
  * We're doing a very basic check. Is it a post?
@@ -91,10 +70,10 @@ if (!$_POST) {
 	// We are a post, we're checking for a URL, let's do the magic!
 
 	// Sanitize the URL
-	$varnish_url = (string) rtrim( filter_var($_POST['url'], FILTER_SANITIZE_URL), '/' );
+	$varnish_url  = (string) rtrim( filter_var($_POST['url'], FILTER_SANITIZE_URL), '/' );
 
 	// Set Varnish Host for reasons
-	$varnish_host = preg_replace('#^https?://#', '', $varnish_url);
+	$varnish_host = (string) preg_replace('#^https?://#', '', $varnish_url);
 
 	if (preg_match("~^https://~i", $varnish_url)) {
 		$varnish_url = "https://" . $varnish_url;
@@ -147,11 +126,11 @@ if (!$_POST) {
 		);
 
 		$default = stream_context_set_default($default_opts);
-		$varnish_headers = get_headers( $varnish_url, 1 );
+		$varnish_headers = get_headers( $varnish_url );
 
 		// If there's a 302 redirect then the get_headers 1 param breaks, so we'll compensate.
-		if ( substr($varnish_headers[0], 9, 3) != '200'  ) {
-			$varnish_headers = get_headers( $varnish_headers['Location'], 1 );
+		if ( substr($varnish_headers[0], 9, 3) != '200' ) {
+			$varnish_headers = get_headers( $varnish_headers['Location'] );
 		}
 
 		if ( !isset($varnish_headers['X-Cacheable']) ) {
@@ -194,7 +173,7 @@ if (!$_POST) {
 		 * We're going to do some extra checks to make sure this is WordPress and that everything's above board.
 		 */
 
-		// WordPress
+		// WORDPRESS
 		$tags = get_meta_tags($varnish_url);
 		if ( isset($tags['generator']) && strpos( $tags['generator'] ,'WordPress') !== false ) {
 			?><tr>
@@ -210,9 +189,7 @@ if (!$_POST) {
 
 		// DNS
 		$nameservers = dns_get_record($varnish_host,DNS_NS);
-
 		if ( isset( $nameservers ) && is_array( $nameservers )  ) {
-
 			$nsrecords = '';
 			foreach ($nameservers as $record) {
 				$nsrecords .= $record['target'].' ';
@@ -228,19 +205,31 @@ if (!$_POST) {
 					<td>Not using DreamHost's nameservers:<br /><?php echo $nsrecords; ?><br />(Ours are ns1.dreamhost.com, ns2.dreamhost.com, ns3.dreamhost.com)</td>
 				</tr><?php
 			}
-
 		}
 
-		// Varnish
+		// VARNISH
 		if ( isset( $varnish_headers['X-Cacheable'] ) && strpos( $varnish_headers['X-Cacheable'] ,'YES') !== false ) {
 			?><tr>
 				<td><?php echo $icon_good; ?></td>
 				<td>Varnish is running properly so caching is happening.</td>
 			</tr><?php
-		} else {
+		} elseif (isset( $varnish_headers['X-Cacheable'] ) && strpos( $varnish_headers['X-Cacheable'] ,'NO') !== false ) {
 			?><tr>
 				<td><?php echo $icon_bad; ?></td>
 				<td>Varnish is running but can't cache.</td>
+			</tr><?php
+		} else {
+			?><tr>
+				<td><?php echo $icon_warning; ?></td>
+				<td>We can't find Varnish on this server.</td>
+			</tr><?php
+		}
+
+		// CLOUDFLARE
+		if ( isset( $varnish_headers['Server'] ) && strpos( $varnish_headers['Server'] ,'cloudflare') !== false ) {
+			?><tr>
+				<td><?php echo $icon_warning; ?></td>
+				<td>You're using Cloudflare and may experience some cache oddities.</td>
 			</tr><?php
 		}
 
