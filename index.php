@@ -228,6 +228,7 @@ if (!$_POST) {
 					
 					if ( strpos( $cookie, 'wfvt_' ) !== false ) {
 						?><br /><i class="fa fa-bomb" style="color:#FF0000;"></i> WordFence is putting down cookies on every page load. Please disable that in your options (available from version 4.0.4 and up)<?php
+					}
 				}
 			}
 		}
