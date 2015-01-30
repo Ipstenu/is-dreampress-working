@@ -115,6 +115,7 @@ if (!$_POST) {
 	// Good, we're a real URL.
 	$varnish_host = preg_replace('#^https?://#', '', $varnish_url);
 
+		// Set some non insane defaults
 		$default_opts = array(
 		  'http'=>array(
 		    'method'=>"HEAD",
@@ -125,8 +126,8 @@ if (!$_POST) {
 		    	"Accept: */*",
 		  )
 		);
+		stream_context_set_default($default_opts);
 
-		$default = stream_context_set_default($default_opts);
 		$varnish_headers = get_headers( $varnish_url, 1 );
 
 		// If there's a 302 redirect then the get_headers 1 param breaks, so we'll compensate.
@@ -342,7 +343,7 @@ if (!$_POST) {
 
       </div><!-- end content -->
       <div id="footer">
-        <div>isdreampressworking.com brought to you by:</div>
+        <div>Brought to you by:</div>
         <div><a href="https://www.dreamhost.com"><img src="assets/images/logo.dreamhost.svg" width="200px" /></a><div>
         <div><a href="https://www.dreamhost.com" target="_new" >DreamHost</a></div>
       </div><!-- end footer -->
