@@ -5,7 +5,7 @@ This code is based on http://www.isvarnishworking.com/ - without ever seeing the
 
 Currently it works, but it has some room to grow
 
-Demo: http://breakwpdh.com/testdreampress.php
+Demo: http://breakwpdh.com/isdreampressworking/
 
 ##To Do
 		
