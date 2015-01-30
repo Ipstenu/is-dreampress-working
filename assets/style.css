@@ -123,6 +123,14 @@ a:hover {
   padding: 40px 0px;
 }
 
+#subtitle {
+  font-size: 36pt;
+  font-weight: bold;
+  text-align: center;
+  padding: 40px 0px;
+}
+
+
 #content {
   padding:0 48px 20px;
   text-align: center;

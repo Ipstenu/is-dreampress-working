@@ -26,7 +26,8 @@
   </head>
   <body>
     <div id="container">
-      <div id="content">
+		<div id="content">
+	    	<div id="title">Is DreamPress Working?</div>
 
 <?php
 
@@ -49,8 +50,6 @@ if (!$_POST) {
 	// If this is NOT a post, we should show the basic welcome.
 	?>
 
-	<div id="title">Is DreamPress Working?</div>
-
 	<p>So you have a site hosted on DreamPress and you're not sure if it's working right or caching fully? Let us help!</p>
 
 	<?php
@@ -58,7 +57,7 @@ if (!$_POST) {
 	// This IS a post, but you forgot a URL. Can't scan nothing.
 	?>
 
-	<div id="title">Whoops!</div>
+	<div id="subtitle">Whoops!</div>
 
 	<p>Did you forget to put in a URL?</p>
 
@@ -71,6 +70,7 @@ if (!$_POST) {
 
 	// Sanitize the URL
 	$varnish_url  = (string) rtrim( filter_var($_POST['url'], FILTER_SANITIZE_URL), '/' );
+	$varnish_url = (string) $_POST['url'];
 
 	// Set Varnish Host for reasons
 	$varnish_host = (string) preg_replace('#^https?://#', '', $varnish_url);
@@ -86,9 +86,10 @@ if (!$_POST) {
 	// Call StrictURLValidator becuase FILTER_VALIDATE_URL things http://foo is okay, even when you tell it you want the damn host.
 	require_once 'StrictUrlValidator.php';
 
+	// If we're SSL, bail early
 	if ( preg_match("~^https://~i", $varnish_url) ) {
 	?>
-		<div id="title">SSL Enabled URL</div>
+		<div id="subtitle">SSL Enabled URL</div>
 
 		<p>Did you know Varnish can't cache SSL? This is <a href="https://www.varnish-cache.org/docs/trunk/phk/ssl.html">by design and is unlikely to change</a>.</p>
 
@@ -98,7 +99,7 @@ if (!$_POST) {
 	} elseif ( StrictUrlValidator::validate( $varnish_url, true, true ) === false ) {
 	?>
 
-		<div id="title">Egad!</div>
+		<div id="subtitle">Egad!</div>
 
 		<p><?php echo $varnish_url; ?> is not a valid URL.</p>
 
@@ -108,39 +109,56 @@ if (!$_POST) {
 
 	<?php
 	} else {
-
-	// Sanitize!
-
-
-	// Good, we're a real URL.
-	$varnish_host = preg_replace('#^https?://#', '', $varnish_url);
-
-		// Set some non insane defaults
-		$default_opts = array(
-		  'http'=>array(
-		    'method'=>"HEAD",
-		    'timeout' => 10,
-		    'header'=>
-		    	"Host: $varnish_host\r\n" .
-		    	"Accept-Encoding: gzip, deflate\r\n" .
-		    	"Accept: */*",
-		  )
-		);
-		stream_context_set_default($default_opts);
-
-		$varnish_headers = get_headers( $varnish_url, 1 );
-
-		// If there's a 302 redirect then the get_headers 1 param breaks, so we'll compensate.
-		if ( substr($varnish_headers[0], 9, 3) != '200' ) {
-			$varnish_headers = get_headers( $varnish_headers['Location'], 1 );
+		// Good, we're a real URL.
+		$varnish_host = preg_replace('#^https?://#', '', $varnish_url);
+	
+		function curl_headers ( $url ) {
+			$curl = curl_init();
+			curl_setopt_array( $curl, array(
+				CURLOPT_FAILONERROR => true,
+				CURLOPT_CONNECTTIMEOUT => 30,
+				CURLOPT_TIMEOUT => 60,
+				CURLOPT_FOLLOWLOCATION => false,
+				CURLOPT_MAXREDIRS => 10,
+			    CURLOPT_HEADER => true,
+			    CURLOPT_NOBODY => true,
+			    CURLOPT_RETURNTRANSFER => true,
+			    CURLOPT_URL => $url ) );
+			
+			return $curl;
 		}
+		
+		function curl_response ( $connection ) {
+			$varnish_result = curl_exec($connection);
+			$varnish_headerinfo = curl_getinfo($connection);
+			$varnish_headers = array();		
+			$varnish_responseheader = explode( "\n" , trim( mb_substr($varnish_result, 0, $varnish_headerinfo['header_size'] ) ) );
 
-		echo $varnish_headers['Location'];
+			// Reformatting 0 entry for playback
+			$varnish_headers[0] = $varnish_responseheader[0];
+			unset($varnish_responseheader[0]);
+
+			foreach( $varnish_responseheader as $line ) {
+				list( $key, $val) = explode( ':' , $line , 2 );
+				$varnish_headers[$key] = trim($val);
+			}
+	
+			return $varnish_headers;		
+		}
+	
+		$CurlConnection = curl_headers( $varnish_url );	
+		$varnish_headers = curl_response( $CurlConnection );
+	
+		// If there's a 302 redirect then the get_headers 1 param breaks, so we'll compensate.
+		
+		do {
+			$varnish_headers = curl_response( curl_headers( $varnish_headers['Location'] ) );
+		} while ( strpos( $varnish_headers[0] , '200') === false );
 
 		if ( !isset($varnish_headers['X-Cacheable']) ) {
 
 			?>
-			<div id="title">Alas, no.</div>
+			<div id="subtitle">Alas, no.</div>
 			<p>Our robots were not find the "X-Varnish" header in the response from the server. That means Varnish is probably not running, which in turn means you actually may not be on DreamPress!</p>
 			<p>If you're sure you <em>are</em> on DreamPress, take the information below and send it in a support ticket to our awesome techs. That will help us debug things even faster!</p>
 
@@ -149,7 +167,7 @@ if (!$_POST) {
 		} elseif ( strpos( $varnish_headers['X-Cacheable'], 'yes') !== false || strpos( $varnish_headers['X-Cacheable'], 'YES') !== false ) {
 			?>
 			<p><img src="assets/images/robot.presents.right.svg" style="float:left;margin:0 5px 0 0;" width="150" /></p>
-			<div id="title">Yes!</div>
+			<div id="subtitle">Yes!</div>
 			<p>Well, congratulations to you!</p>
 			<p>Looks like DreamPress is running and so is our awesome Varnish cache.</p>
 			<p>Want to know more about the site? Check the results below:</p><br style="clear:both;" />
@@ -157,7 +175,7 @@ if (!$_POST) {
 
 		} else {
 			?>
-			<div id="title">Not Exactly</div>
+			<div id="subtitle">Not Exactly</div>
 
 			<p>Faaaail</p>
 
@@ -165,9 +183,7 @@ if (!$_POST) {
 
 			<?php
 		}
-
 		?>
-
 		<table id="headers">
 		<?php
 
@@ -321,9 +337,7 @@ if (!$_POST) {
 							}
 							$key = $newkey;
 						}
-
 						echo '<tr><td style="text-align:right;">'.$header.':</td><td>'.$key.'</td></tr>';
-						$rownum++;
 					}
 				}
 				?>
