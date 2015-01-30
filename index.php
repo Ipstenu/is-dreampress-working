@@ -199,7 +199,7 @@ if (!$_POST) {
 		$tags = get_meta_tags($varnish_url);
 		if ( isset($tags['generator']) && strpos( $tags['generator'] ,'WordPress') !== false ) {
 			?><tr>
-				<td><?php echo $icon_good; ?></td>
+				<td width="10px"><?php echo $icon_good; ?></td>
 				<td>This is a WordPress site!</td>
 			</tr><?php
 		} else {
