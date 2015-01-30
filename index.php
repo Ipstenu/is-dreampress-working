@@ -158,9 +158,7 @@ if (!$_POST) {
 
 			?>
 			<div id="title">Alas, no.</div>
-
 			<p>Our robots were not find the "X-Varnish" header in the response from the server. That means Varnish is probably not running, which in turn means you actually may not be on DreamPress!</p>
-
 			<p>If you're sure you <em>are</em> on DreamPress, take the information below and send it in a support ticket to our awesome techs. That will help us debug things even faster!</p>
 
 			<?php
@@ -170,7 +168,8 @@ if (!$_POST) {
 			<p><img src="assets/images/robot.presents.right.svg" style="float:left;margin:0 5px 0 0;" width="150" /></p>
 			<div id="title">Yes!</div>
 			<p>Well, congratulations to you!</p>
-			<p>Looks like DreamPress is running and so is our awesome Varnish cache.</p><br style="clear:both;" />
+			<p>Looks like DreamPress is running and so is our awesome Varnish cache.</p>
+			<p>Want to know more about the site? Check the results below:</p><br style="clear:both;" />
 			<?php
 
 		} else {
@@ -204,7 +203,7 @@ if (!$_POST) {
 			</tr><?php
 		} else {
 			?><tr>
-				<td><?php echo $icon_warning; ?></td>
+				<td width="10px"><?php echo $icon_warning; ?></td>
 				<td>We're not sure if this is a WordPress site... Did you strip the meta tags?</td>
 			</tr><?php
 		}
@@ -232,9 +231,21 @@ if (!$_POST) {
 
 		}
 
+		// Varnish
+		if ( isset( $varnish_headers['X-Cacheable'] ) && strpos( $varnish_headers['X-Cacheable'] ,'YES') !== false ) {
+			?><tr>
+				<td><?php echo $icon_good; ?></td>
+				<td>Varnish is running properly so caching is happening.</td>
+			</tr><?php
+		} else {
+			?><tr>
+				<td><?php echo $icon_bad; ?></td>
+				<td>Varnish is running but can't cache.</td>
+			</tr><?php
+		}
+
 
 		// PAGESPEED
-
 		if ( isset( $varnish_headers['X-Mod-Pagespeed'] ) ) {
 			?><tr>
 				<td><?php echo $icon_warning; ?></td>
