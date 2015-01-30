@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
 	<!-- Holy shit. So many icons. -->
-	
+
 	<link href="assets/images/favicons/apple-touch-icon-57x57.png" sizes="57x57" rel="apple-touch-icon"></link>
 	<link href="assets/images/favicons/apple-touch-icon-114x114.png" sizes="114x114" rel="apple-touch-icon"></link>
 	<link href="assets/images/favicons/apple-touch-icon-72x72.png" sizes="72x72" rel="apple-touch-icon"></link>
@@ -32,6 +32,12 @@
 
 // Define the filename so I can move this around.
 $filename=$_SERVER["PHP_SELF"];
+
+// Icons
+
+$icon_good 		= '<i class="fa fa-beer" style="color:#008000;"></i>';
+$icon_warning 	= '<i class="fa fa-exclamation-triangle" style="color:#FFD700"></i>';
+$icon_bad		= '<i class="fa fa-bomb" style="color:#FF0000;"></i>';
 
 /*
  * Get File Contents
@@ -63,39 +69,39 @@ function file_get_contents_curl($url)
 if (!$_POST) {
 	// If this is NOT a post, we should show the basic welcome.
 	?>
-	
+
 	<div id="title">Is DreamPress Working?</div>
-	
+
 	<p>So you have a site hosted on DreamPress and you're not sure if it's working right or caching fully? Let us help!</p>
-	
+
 	<?php
 } elseif (!$_POST['url']) {
 	// This IS a post, but you forgot a URL. Can't scan nothing.
 	?>
 
 	<div id="title">Whoops!</div>
-	
+
 	<p>Did you forget to put in a URL?</p>
-	
+
 	<p>Try again!</p>
 
-	<?php	
+	<?php
 } else {
 
 	// We are a post, we're checking for a URL, let's do the magic!
 
 	// Sanitize the URL
 	$varnish_url = (string) rtrim( filter_var($_POST['url'], FILTER_SANITIZE_URL), '/' );
-	
+
 	// Set Varnish Host for reasons
 	$varnish_host = preg_replace('#^https?://#', '', $varnish_url);
-	
+
 	if (preg_match("~^https://~i", $varnish_url)) {
 		$varnish_url = "https://" . $varnish_url;
 	} elseif (!preg_match("~^(?:f|ht)tp?://~i", $varnish_url)) {
 	    $varnish_url = "http://" . $varnish_url;
 	}
-		
+
 	// Is it a real URL?
 
 	// Call StrictURLValidator becuase FILTER_VALIDATE_URL things http://foo is okay, even when you tell it you want the damn host.
@@ -104,28 +110,28 @@ if (!$_POST) {
 	if ( preg_match("~^https://~i", $varnish_url) ) {
 	?>
 		<div id="title">SSL Enabled URL</div>
-		
+
 		<p>Did you know Varnish can't cache SSL? This is <a href="https://www.varnish-cache.org/docs/trunk/phk/ssl.html">by design and is unlikely to change</a>.</p>
-		
+
 		<p>At this time, if you're using SSL, DreamPress will be running a little slower than it might. Sorry. We're working on that!</p>
-	
-	<?php	
+
+	<?php
 	} elseif ( StrictUrlValidator::validate( $varnish_url, true, true ) === false ) {
 	?>
 
 		<div id="title">Egad!</div>
-		
+
 		<p><?php echo $varnish_url; ?> is not a valid URL.</p>
 
 		<?php echo "<p>URL validation failed: " . StrictUrlValidator::getError() . "</p>"; ?>
-		
+
 		<p>Try again!</p>
 
-	<?php	
+	<?php
 	} else {
 
 	// Sanitize!
-	
+
 
 	// Good, we're a real URL.
 	$varnish_host = preg_replace('#^https?://#', '', $varnish_url);
@@ -139,7 +145,7 @@ if (!$_POST) {
 		    	"Accept: */*",
 		  )
 		);
-		
+
 		$default = stream_context_set_default($default_opts);
 		$varnish_headers = get_headers( $varnish_url, 1 );
 
@@ -147,18 +153,18 @@ if (!$_POST) {
 		if ( substr($varnish_headers[0], 9, 3) != '200'  ) {
 			$varnish_headers = get_headers( $varnish_headers['Location'], 1 );
 		}
-		
+
 		if ( !isset($varnish_headers['X-Cacheable']) ) {
-			
+
 			?>
 			<div id="title">Alas, no.</div>
-			
+
 			<p>Our robots were not find the "X-Varnish" header in the response from the server. That means Varnish is probably not running, which in turn means you actually may not be on DreamPress!</p>
-			
+
 			<p>If you're sure you <em>are</em> on DreamPress, take the information below and send it in a support ticket to our awesome techs. That will help us debug things even faster!</p>
-					
+
 			<?php
-			
+
 		} elseif ( strpos( $varnish_headers['X-Cacheable'], 'yes') !== false || strpos( $varnish_headers['X-Cacheable'], 'YES') !== false ) {
 			?>
 			<p><img src="assets/images/robot.presents.right.svg" style="float:left;margin:0 5px 0 0;" width="150" /></p>
@@ -170,17 +176,17 @@ if (!$_POST) {
 		} else {
 			?>
 			<div id="title">Not Exactly</div>
-			
+
 			<p>Faaaail</p>
-			
-			<p>So here's the deal. Varnish is running, but it can't serve up the cache properly. Why? Check out the red-bombs and yellow-warnings below.</p> 
-			
+
+			<p>So here's the deal. Varnish is running, but it can't serve up the cache properly. Why? Check out the red-bombs and yellow-warnings below.</p>
+
 			<?php
 		}
 
 		?>
-		
-		<p>
+
+		<table id="headers">
 		<?php
 
 		/*
@@ -188,85 +194,122 @@ if (!$_POST) {
 		 *
 		 * We're going to do some extra checks to make sure this is WordPress and that everything's above board.
 		 */
-		
+
 		// WordPress
 		$tags = get_meta_tags($varnish_url);
 		if ( isset($tags['generator']) && strpos( $tags['generator'] ,'WordPress') !== false ) {
-			?><i class="fa fa-beer" style="color:#008000;"></i> We have detected this is a WordPress site!<?php
+			?><tr>
+				<td><?php echo $icon_good; ?></td>
+				<td>This is a WordPress site!</td>
+			</tr><?php
 		} else {
-			?><i class="fa fa-exclamation-triangle" style="color:#FFD700"></i> We're not sure if this is a WordPress site... Did you strip the meta tags?<?php
+			?><tr>
+				<td><?php echo $icon_warning; ?></td>
+				<td>We're not sure if this is a WordPress site... Did you strip the meta tags?</td>
+			</tr><?php
 		}
-		
+
 		// DNS
 		$nameservers = dns_get_record($varnish_host,DNS_NS);
-		foreach ($nameservers as $record) {
-					echo '<li>'.$record['target'].'</li>';
-				}
+
+		if ( isset( $nameservers ) && is_array( $nameservers )  ) {
+
+			$nsrecords = '';
+			foreach ($nameservers as $record) {
+				$nsrecords .= $record['target'].' ';
+			}
+			if ( isset( $nsrecords ) && strpos( $nsrecords ,'dreamhost') !== false ) {
+				?><tr>
+					<td><?php echo $icon_good; ?></td>
+					<td>DreamHost's nameservers are in use:<br /><?php echo $nsrecords; ?></td>
+				</tr><?php
+			} else {
+				?><tr>
+					<td><?php echo $icon_warning; ?></td>
+					<td>Not using DreamHost's nameservers:<br /><?php echo $nsrecords; ?><br />(Ours are ns1.dreamhost.com, ns2.dreamhost.com, ns3.dreamhost.com)</td>
+				</tr><?php
+			}
+
+		}
+
 
 		// PAGESPEED
-		
+
 		if ( isset( $varnish_headers['X-Mod-Pagespeed'] ) ) {
-			?><br /><i class="fa fa-exclamation-triangle" style="color:#FFD700"></i> Mod Pagespeed is active. Make sure you've turned off caching headers! <a href="http://wiki.dreamhost.com/DreamPress#Can_I_use_PageSpeed_and_Varnish_together.3F">Don't know how? Read this!</a><?php
+			?><tr>
+				<td><?php echo $icon_warning; ?></td>
+				<td>Mod Pagespeed is active. Make sure you've turned off caching headers! <a href="http://wiki.dreamhost.com/DreamPress#Can_I_use_PageSpeed_and_Varnish_together.3F">Don't know how? Read this!</a></td>
+			</tr><?php
 		}
-		
+
 		// SET COOKIE
 		if ( isset( $varnish_headers['Set-Cookie'] ) ) {
-			
+
 			// If we're NOT an array...
 			if ( !is_array( $varnish_headers['Set-Cookie'] ) ) {
 				// Check for PHPSESSID
 				if ( strpos( $varnish_headers['Set-Cookie'] , 'PHPSESSID') !== false ) {
-					?><br /><i class="fa fa-bomb" style="color:#FF0000;"></i> You're setting a PHPSESSID cookie. This makes Varnish not deliver cached pages.<?php
+					?><tr>
+						<td><?php echo $icon_bad; ?></td>
+						<td>You're setting a PHPSESSID cookie. This makes Varnish not deliver cached pages.</td>
+					</tr><?php
 				}
 			} else {
 				// Check all the cookies for known problems
 				foreach ( $varnish_headers['Set-Cookie'] as $key => $cookie ) {
 					// EDD
 					if ( strpos( $cookie, 'edd_wp_session' ) !== false ) {
-						?><br /><i class="fa fa-exclamation-triangle" style="color:#FFD700"></i> You're using Easy Digital Downloads. Currently it's setting a cookie on every page, which is busting the cache. Please set <code>define( 'EDD_USE_PHP_SESSIONS', true );</code> in your <code>wp-config.php</code> file.<?php
+						?><tr>
+							<td><?php echo $icon_warning; ?></td>
+							<td>You're using Easy Digital Downloads. Currently it's setting a cookie on every page, which is busting the cache. Please set <code>define( 'EDD_USE_PHP_SESSIONS', true );</code> in your <code>wp-config.php</code> file.</td>
+						</tr><?php
 					}
-					
+
 					if ( strpos( $cookie, 'wfvt_' ) !== false ) {
-						?><br /><i class="fa fa-bomb" style="color:#FF0000;"></i> WordFence is putting down cookies on every page load. Please disable that in your options (available from version 4.0.4 and up)<?php
+						?><tr>
+							<td><?php echo $icon_bad; ?></td>
+							<td>WordFence is putting down cookies on every page load. Please disable that in your options (available from version 4.0.4 and up)</td>
+						</tr><?php
 					}
 				}
 			}
 		}
-		
+
 		// CACHE-CONTROL
 		if ( isset( $varnish_headers['Cache-Control'] ) && strpos( $varnish_headers['Cache-Control'] ,'no-cache') !== false ) {
-			?><br /><i class="fa fa-bomb" style="color:#FF0000;"></i> Something is setting the header Cache-Control to 'no-cache' which means visitors will never get cached pages.<?php
+			?><tr>
+				<td><?php echo $icon_bad; ?></td>
+				<td>Something is setting the header Cache-Control to 'no-cache' which means visitors will never get cached pages.</td>
+			</tr><?php
 		}
 
 		// PRAGMA
 		if ( isset( $varnish_headers['Pragma'] ) && strpos( $varnish_headers['Pragma'] ,'no-cache') !== false ) {
-			?><br /><i class="fa fa-bomb" style="color:#FF0000;"></i> Something is setting the header Pragma to 'no-cache' which means visitors will never get cached pages.<?php
+			?><tr>
+				<td><?php echo $icon_bad; ?></td>
+				<td>Something is setting the header Pragma to 'no-cache' which means visitors will never get cached pages.</td>
+			</tr><?php
 		}
+
 		?>
-		</p>
-		
+		</table>
+
 		<p>If you had any red-bomb warnings, you should review your plugins and themes to see if they're busting cache.</p>
 
 		<p>Here are some more gory details about the site:</p>
 
 		<?php
 		// No matter what, we're going to show the headers etc. right? Wrong! If it wasn't a valid URL, we shouldn't
-		
+
 		if ( StrictUrlValidator::validate( $varnish_url, true, true ) === true ) {
-			?>				
+			?>
 			<table id="headers">
-				<tr class="even"><td width="200px" style="text-align:right;">The url we checked:</td><td><?php echo $varnish_host; ?></td></tr>
-				<tr class="odd"><td width="200px">&nbsp;</td><td><?php echo $varnish_headers[0]; ?></td></tr>
+				<tr><td width="200px" style="text-align:right;">The url we checked:</td><td><?php echo $varnish_host; ?></td></tr>
+				<tr><td width="200px">&nbsp;</td><td><?php echo $varnish_headers[0]; ?></td></tr>
 				<?php
-				$rownum = '1';
 				foreach ($varnish_headers as $header => $key ) {
-					if ($rownum & 1) { 
-						$rowclass = "even";
-					} else {
-						$rowclass = "odd";
-					}
 					if ( $header != '0' ) {
-						
+
 						if ( is_array($key) ) {
 							$newkey = '';
 							foreach ($key as $entry => $subkey ) {
@@ -274,10 +317,10 @@ if (!$_POST) {
 							}
 							$key = $newkey;
 						}
-						
-						echo '<tr class="'.$rowclass.'"><td width="200px" style="text-align:right;">'.$header.':</td><td>'.$key.'</td></tr>';
+
+						echo '<tr><td style="text-align:right;">'.$header.':</td><td>'.$key.'</td></tr>';
 						$rownum++;
-					}					
+					}
 				}
 				?>
 			</table>
@@ -285,8 +328,8 @@ if (!$_POST) {
 	        <div style="margin: 30px;font-weight: bold;font-size: 18pt;">Check another site!</div>
 	    <?php
 		    }
-	}	
-} 
+	}
+}
 ?>
 
 	<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">

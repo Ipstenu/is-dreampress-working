@@ -167,7 +167,7 @@ a:hover {
   overflow: hidden;
 }
 
-.odd {
+tr:nth-child(even) {
   background-color: #ddd;
 }
 
