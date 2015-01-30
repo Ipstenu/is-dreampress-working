@@ -118,6 +118,7 @@ if (!$_POST) {
 		$default_opts = array(
 		  'http'=>array(
 		    'method'=>"HEAD",
+		    'timeout' => 10,
 		    'header'=>
 		    	"Host: $varnish_host\r\n" .
 		    	"Accept-Encoding: gzip, deflate\r\n" .
