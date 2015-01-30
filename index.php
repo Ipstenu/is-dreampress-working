@@ -9,7 +9,6 @@
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
 	<!-- Holy shit. So many icons. -->
-
 	<link href="assets/images/favicons/apple-touch-icon-57x57.png" sizes="57x57" rel="apple-touch-icon"></link>
 	<link href="assets/images/favicons/apple-touch-icon-114x114.png" sizes="114x114" rel="apple-touch-icon"></link>
 	<link href="assets/images/favicons/apple-touch-icon-72x72.png" sizes="72x72" rel="apple-touch-icon"></link>
@@ -35,7 +34,6 @@
 $filename=$_SERVER["PHP_SELF"];
 
 // Icons
-
 $icon_good 		= '<i class="fa fa-beer" style="color:#008000;"></i>';
 $icon_warning 	= '<i class="fa fa-exclamation-triangle" style="color:#FFD700"></i>';
 $icon_bad		= '<i class="fa fa-bomb" style="color:#FF0000;"></i>';
@@ -57,7 +55,7 @@ if (!$_POST) {
 	// This IS a post, but you forgot a URL. Can't scan nothing.
 	?>
 
-	<div id="subtitle">Whoops!</div>
+	<div id="subtitle">We can't tell!</div>
 
 	<p>Did you forget to put in a URL?</p>
 
@@ -89,7 +87,7 @@ if (!$_POST) {
 	// If we're SSL, bail early
 	if ( preg_match("~^https://~i", $varnish_url) ) {
 	?>
-		<div id="subtitle">SSL Enabled URL</div>
+		<div id="subtitle">Not for SSL</div>
 
 		<p>Did you know Varnish can't cache SSL? This is <a href="https://www.varnish-cache.org/docs/trunk/phk/ssl.html">by design and is unlikely to change</a>.</p>
 
@@ -110,8 +108,8 @@ if (!$_POST) {
 	<?php
 	} else {
 		// Good, we're a real URL.
-		$varnish_host = preg_replace('#^https?://#', '', $varnish_url);
-	
+
+		// Since we reuse this, let's have a curl function
 		function curl_headers ( $url ) {
 			$curl = curl_init();
 			curl_setopt_array( $curl, array(
@@ -122,12 +120,16 @@ if (!$_POST) {
 				CURLOPT_MAXREDIRS => 10,
 			    CURLOPT_HEADER => true,
 			    CURLOPT_NOBODY => true,
+			    CURLOPT_VERBOSE => true,
 			    CURLOPT_RETURNTRANSFER => true,
+			    CURLOPT_ENCODING => 'gzip, deflate',
 			    CURLOPT_URL => $url ) );
 			
 			return $curl;
+			curl_close($curl);
 		}
 		
+		// We also call the response a couple times
 		function curl_response ( $connection ) {
 			$varnish_result = curl_exec($connection);
 			$varnish_headerinfo = curl_getinfo($connection);
@@ -150,10 +152,9 @@ if (!$_POST) {
 		$varnish_headers = curl_response( $CurlConnection );
 	
 		// If there's a 302 redirect then the get_headers 1 param breaks, so we'll compensate.
-		
-		do {
+		while ( strpos( $varnish_headers[0] , '200') === false ) {
 			$varnish_headers = curl_response( curl_headers( $varnish_headers['Location'] ) );
-		} while ( strpos( $varnish_headers[0] , '200') === false );
+		}
 
 		if ( !isset($varnish_headers['X-Cacheable']) ) {
 
@@ -164,7 +165,7 @@ if (!$_POST) {
 
 			<?php
 
-		} elseif ( strpos( $varnish_headers['X-Cacheable'], 'yes') !== false || strpos( $varnish_headers['X-Cacheable'], 'YES') !== false ) {
+		} elseif ( strpos( $varnish_headers['X-Cacheable'], 'yes') !== false || strpos( $varnish_headers['X-Cacheable'], 'YES') !== false && isset($varnish_headers['Age']) && $varnish_headers['Age'] > 0 ) {
 			?>
 			<p><img src="assets/images/robot.presents.right.svg" style="float:left;margin:0 5px 0 0;" width="150" /></p>
 			<div id="subtitle">Yes!</div>
@@ -176,8 +177,6 @@ if (!$_POST) {
 		} else {
 			?>
 			<div id="subtitle">Not Exactly</div>
-
-			<p>Faaaail</p>
 
 			<p>So here's the deal. Varnish is running, but it can't serve up the cache properly. Why? Check out the red-bombs and yellow-warnings below.</p>
 
@@ -205,6 +204,21 @@ if (!$_POST) {
 				<td width="10px"><?php echo $icon_warning; ?></td>
 				<td>We're not sure if this is a WordPress site... Did you strip the meta tags?</td>
 			</tr><?php
+		}
+		
+		// SERVER
+		if ( isset( $varnish_headers['Server'] ) ) {
+			if ( strpos( $varnish_headers['Server'] ,'Pagely') !== false ) {
+			?><tr>
+				<td><?php echo $icon_bad; ?></td>
+				<td>This site is on Pagely, bro.</td>
+			</tr><?php
+			} elseif ( strpos( $varnish_headers['Server'] ,'nginx') !== false ) {
+			?><tr>
+				<td><?php echo $icon_bad; ?></td>
+				<td>Server shows as nginx. DreamPress is Apache. Something's wrong.</td>
+			</tr><?php		
+			}	
 		}
 
 		// DNS
@@ -265,33 +279,48 @@ if (!$_POST) {
 		// SET COOKIE
 		if ( isset( $varnish_headers['Set-Cookie'] ) ) {
 
-			// If we're NOT an array...
-			if ( !is_array( $varnish_headers['Set-Cookie'] ) ) {
-				// Check for PHPSESSID
-				if ( strpos( $varnish_headers['Set-Cookie'] , 'PHPSESSID') !== false ) {
-					?><tr>
-						<td><?php echo $icon_bad; ?></td>
-						<td>You're setting a PHPSESSID cookie. This makes Varnish not deliver cached pages.</td>
-					</tr><?php
-				}
-			} else {
-				// Check all the cookies for known problems
-				foreach ( $varnish_headers['Set-Cookie'] as $key => $cookie ) {
-					// EDD
-					if ( strpos( $cookie, 'edd_wp_session' ) !== false ) {
-						?><tr>
-							<td><?php echo $icon_warning; ?></td>
-							<td>You're using Easy Digital Downloads. Currently it's setting a cookie on every page, which is busting the cache. Please set <code>define( 'EDD_USE_PHP_SESSIONS', true );</code> in your <code>wp-config.php</code> file.</td>
-						</tr><?php
-					}
+			if ( strpos( $varnish_headers['Set-Cookie'] , 'PHPSESSID') !== false ) {
+				?><tr>
+					<td><?php echo $icon_bad; ?></td>
+					<td>You're setting a PHPSESSID cookie. This makes Varnish not deliver cached pages.</td>
+				</tr><?php
+			} elseif ( strpos( $varnish_headers['Set-Cookie'], 'edd_wp_session' ) !== false ) {
+				?><tr>
+					<td><?php echo $icon_bad; ?></td>
+					<td>We've spotted Easy Digital Downloads being used with cookie sessions. This causes your cache to misbehave. Please set <code>define( 'EDD_USE_PHP_SESSIONS', true );</code> in your <code>wp-config.php</code> file.</td>
+				</tr><?php
+			} elseif ( strpos( $varnish_headers['Set-Cookie'], 'edd_items_in_cart' ) !== false ) {
+				?><tr>
+					<td><?php echo $icon_warning; ?></td>
+					<td>Avast! We spy Easy Digital Downloads. When customers add items to their cart, they'll no longer be using cached pages. Thought you ought to know.</td>
+				</tr><?php				
+			} elseif ( strpos( $varnish_headers['Set-Cookie'], 'wfvt_' ) !== false ) {
+				?><tr>
+					<td><?php echo $icon_bad; ?></td>
+					<td>WordFence is putting down cookies on every page load. Please disable that in your options (available from version 4.0.4 and up)</td>
+				</tr><?php
+			}
+		}
 
-					if ( strpos( $cookie, 'wfvt_' ) !== false ) {
-						?><tr>
-							<td><?php echo $icon_bad; ?></td>
-							<td>WordFence is putting down cookies on every page load. Please disable that in your options (available from version 4.0.4 and up)</td>
-						</tr><?php
-					}
-				}
+		// AGE
+		if( !isset($varnish_headers['Age']) ) {
+			?><tr>
+				<td><?php echo $icon_bad; ?></td>
+				<td>There's no "Age" header, which means we can't tell if the page is actually serving from cache.</td>
+			</tr><?php
+		} elseif( $varnish_headers['Age'] <= 0 ) {
+			if( !isset($varnish_headers['Cache-Control']) || strpos($varnish_headers['Cache-Control'], 'max-age') === FALSE ) {
+			?><tr>
+				<td><?php echo $icon_warning; ?></td>
+				<td>The "Age" header is set to less than 1, which means you checked right when Varnish cleared it's cache for that url, or for whatever reason Varnish is not actually serving the content for that url from cache. Check again (hit refresh) but if it happens again, it could be one of the following reasons:
+					<ul style=\"text-align: left;\">
+						<li>That url is excluded from the cache on purpose in the Varnish vcl file (in which case, yay! It's working.)</li>
+						<li>The application is sending cache headers that are telling Varnish not to serve that content from cache. This means you'll have to fix the cache headers the application is sending to Varnish. A lot of the time those headers are Cache-Control and/or Expires.</li>
+						<li>The application is setting a session cookie, which can prevent Varnish from serving content from cache. This means you'll have to update the application and make it not send a session cookie for anonymous traffic.</li>
+						<li>Drunk robots.</li>
+					</ul>
+				</td>
+			</tr><?php			
 			}
 		}
 
@@ -310,11 +339,26 @@ if (!$_POST) {
 				<td>Something is setting the header Pragma to 'no-cache' which means visitors will never get cached pages.</td>
 			</tr><?php
 		}
+		
+		// X-CACHE (we're not running this)
+		if ( isset( $varnish_headers['X-Cache-Status'] ) && strpos( $varnish_headers['X-Cache-Status'] ,'MISS') !== false ) {
+			?><tr>
+				<td><?php echo $icon_bad; ?></td>
+				<td>X-Cache missed, which means it's not able to serve this page as cached.</td>
+			</tr><?php
+		}		
 
 		?>
 		</table>
 
-		<p>If you had any red-bomb warnings, you should review your plugins and themes to see if they're busting cache.</p>
+		<p>&nbsp;</p>
+
+		<p>
+		<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">
+	          <input name="url" id="url" value="<?php if (isset($varnish_host)) { echo $varnish_host; } ?>" type="text">
+	          <input name="check_it" id="check_it" value="Recheck!" type="submit">
+	    </form>
+		</p>
 
 		<p>Here are some more gory details about the site:</p>
 
@@ -329,15 +373,7 @@ if (!$_POST) {
 				<?php
 				foreach ($varnish_headers as $header => $key ) {
 					if ( $header != '0' ) {
-
-						if ( is_array($key) ) {
-							$newkey = '';
-							foreach ($key as $entry => $subkey ) {
-								$newkey .= $subkey.'<br />';
-							}
-							$key = $newkey;
-						}
-						echo '<tr><td style="text-align:right;">'.$header.':</td><td>'.$key.'</td></tr>';
+						echo '<tr><td style="text-align:right;">'.$header.':</td><td>'.htmlspecialchars($key).'</td></tr>';
 					}
 				}
 				?>
