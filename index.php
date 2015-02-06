@@ -216,13 +216,14 @@ if (!$_POST) {
 			} elseif ( strpos( $varnish_headers['Server'] ,'nginx') !== false ) {
 			?><tr>
 				<td><?php echo $icon_bad; ?></td>
-				<td>Server shows as nginx. DreamPress is Apache. Something's wrong.</td>
+				<td>Server shows as nginx. DreamPress is Apache. That ain't right...</td>
 			</tr><?php		
 			}	
 		}
 
 		// DNS
-		$nameservers = dns_get_record($varnish_host,DNS_NS);
+		$nameservers = dns_get_record($varnish_host, DNS_NS );
+		$ip = gethostbyname($varnish_host);
 		if ( isset( $nameservers ) && is_array( $nameservers )  ) {
 			$nsrecords = '';
 			foreach ($nameservers as $record) {
@@ -231,13 +232,18 @@ if (!$_POST) {
 			if ( isset( $nsrecords ) && strpos( $nsrecords ,'dreamhost') !== false ) {
 				?><tr>
 					<td><?php echo $icon_good; ?></td>
-					<td>DreamHost's nameservers are in use:<br /><?php echo $nsrecords; ?></td>
+					<td>Huzzah! DreamHost's nameservers are in use:<br /><?php echo $nsrecords; ?></td>
 				</tr><?php
 			} else {
 				?><tr>
 					<td><?php echo $icon_warning; ?></td>
-					<td>Not using DreamHost's nameservers:<br /><?php echo $nsrecords; ?><br />(Ours are ns1.dreamhost.com, ns2.dreamhost.com, ns3.dreamhost.com)</td>
-				</tr><?php
+					<td>These aren't our nameservers:<br /><?php echo $nsrecords; ?><br />(Ours are ns1.dreamhost.com, ns2.dreamhost.com, ns3.dreamhost.com)</td>
+				</tr>
+				<tr>
+					<td><?php echo $icon_warning; ?></td>
+					<td>IP address is set to <?php echo $ip; ?> - Make sure that matches what Panel's DNS entry thinks it should be.</td>
+				</tr>
+				<?php
 			}
 		}
 
@@ -355,7 +361,7 @@ if (!$_POST) {
 
 		<p>
 		<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">
-	          <input name="url" id="url" value="<?php if (isset($varnish_host)) { echo $varnish_host; } ?>" type="text">
+	          <input name="url" id="url" value="<?php if (isset($varnish_host)) { echo $varnish_host; } ?>" type="hidden">
 	          <input name="check_it" id="check_it" value="Recheck!" type="submit">
 	    </form>
 		</p>
@@ -394,8 +400,7 @@ if (!$_POST) {
       </div><!-- end content -->
       <div id="footer">
         <div>Brought to you by:</div>
-        <div><a href="https://www.dreamhost.com"><img src="assets/images/logo.dreamhost.svg" width="200px" /></a><div>
-        <div><a href="https://www.dreamhost.com" target="_new" >DreamHost</a></div>
+        <div><a href="https://www.dreamhost.com" target="_new" ><img src="assets/images/logo.dreamhost.svg" width="200px" alt="DreamHost" title="DreamHost" /></a><div>
       </div><!-- end footer -->
     </div><!-- end container -->
   </body>
