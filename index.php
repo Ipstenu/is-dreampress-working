@@ -234,7 +234,7 @@ if (!$_POST) {
 					<td><?php echo $icon_good; ?></td>
 					<td>Huzzah! DreamHost's nameservers are in use:<br /><?php echo $nsrecords; ?></td>
 				</tr><?php
-			} elseif ( !isset( $nsrecords ) ) {
+			} elseif ( empty( $nsrecords ) ) {
 				?><tr>
 					<td><?php echo $icon_warning; ?></td>
 					<td>We can't detect your name servers. Ours are ns1.dreamhost.com, ns2.dreamhost.com, ns3.dreamhost.com</td>
