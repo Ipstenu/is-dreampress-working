@@ -5,12 +5,8 @@ This code is based on http://www.isvarnishworking.com/ - without ever seeing the
 
 Currently it works, but it has some room to grow
 
-Demo: http://breakwpdh.com/isdreampressworking/
+Demo: http://isdreampressworking.elftest.net/
 
 ##To Do
 		
-* Look for known COOKIE PROBLEMS
-* Failures
-* Not Varnish (i.e. not DreamPress) - Show nameservers
-* If cloudflare...
-* Max-Age 0
+* Suggestions welcome!
