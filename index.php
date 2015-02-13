@@ -213,7 +213,7 @@ if (!$_POST) {
 				<td><?php echo $icon_bad; ?></td>
 				<td>This site is on Pagely, bro.</td>
 			</tr><?php
-			} elseif ( strpos( $varnish_headers['Server'] ,'nginx') !== false ) {
+			} elseif ( strpos( $varnish_headers['Server'] ,'nginx') !== false && strpos( $varnish_headers['Server'] ,'cloudflare') == false ) {
 			?><tr>
 				<td><?php echo $icon_bad; ?></td>
 				<td>Server shows as nginx. DreamPress is Apache. Something's wrong.</td>
