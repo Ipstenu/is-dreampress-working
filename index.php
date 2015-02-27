@@ -319,7 +319,7 @@ if (!$_POST) {
 				<td><?php echo $icon_bad; ?></td>
 				<td>There's no "Age" header, which means we can't tell if the page is actually serving from cache.</td>
 			</tr><?php
-		} elseif( $varnish_headers['Age'] <= 0 ) {
+		} elseif( $varnish_headers['Age'] <= 0 || $varnish_headers['Age'] == 0 ) {
 			if( !isset($varnish_headers['Cache-Control']) || strpos($varnish_headers['Cache-Control'], 'max-age') === FALSE ) {
 			?><tr>
 				<td><?php echo $icon_warning; ?></td>
@@ -340,6 +340,14 @@ if (!$_POST) {
 			?><tr>
 				<td><?php echo $icon_bad; ?></td>
 				<td>Something is setting the header Cache-Control to 'no-cache' which means visitors will never get cached pages.</td>
+			</tr><?php
+		}
+
+		// MAX AGE
+		if ( isset( $varnish_headers['Cache-Control'] ) && strpos( $varnish_headers['Cache-Control'] ,'max-age=0') !== false ) {
+			?><tr>
+				<td><?php echo $icon_bad; ?></td>
+				<td>Something is setting the header Cache-Control to 'max-age=0' which means a page can be no older than 0 seconds before it needs to regenerate the cache.</td>
 			</tr><?php
 		}
 
