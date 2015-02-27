@@ -379,13 +379,13 @@ if (!$_POST) {
 	    </form>
 		</p>
 
-		<p>Here are some more gory details about the site:</p>
-
 		<?php
 		// No matter what, we're going to show the headers etc. right? Wrong! If it wasn't a valid URL, we shouldn't
 
 		if ( StrictUrlValidator::validate( $varnish_url, true, true ) === true ) {
 			?>
+			<p>Here are some more gory details about the site:</p>
+
 			<table id="headers">
 				<tr><td width="200px" style="text-align:right;">The url we checked:</td><td><?php echo $varnish_host; ?></td></tr>
 				<tr><td width="200px">&nbsp;</td><td><?php echo $varnish_headers[0]; ?></td></tr>
@@ -398,12 +398,12 @@ if (!$_POST) {
 				?>
 			</table>
 
-	        <div style="margin: 30px;font-weight: bold;font-size: 18pt;">Check another site!</div>
 	    <?php
-		    }
+		}
 	}
 }
 ?>
+    <div style="margin: 30px;font-weight: bold;font-size: 18pt;">Check another site!</div>
 
 	<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">
           <input name="url" id="url" value="" type="text">
