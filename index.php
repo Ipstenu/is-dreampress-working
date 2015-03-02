@@ -293,7 +293,7 @@ if (!$_POST) {
 			if ( strpos( $varnish_headers['Set-Cookie'] , 'PHPSESSID') !== false ) {
 				?><tr>
 					<td><?php echo $icon_bad; ?></td>
-					<td>You're setting a PHPSESSID cookie. This makes Varnish not deliver cached pages.</td>
+					<td>You're setting a PHPSESSID cookie. This makes Varnish not deliver cached pages. (<a href="phpsessid.php">Need help debugging php sessions?</a>)</td>
 				</tr><?php
 			} elseif ( strpos( $varnish_headers['Set-Cookie'], 'edd_wp_session' ) !== false ) {
 				?><tr>
