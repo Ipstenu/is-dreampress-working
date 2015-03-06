@@ -27,6 +27,8 @@
     <div id="container">
 		<div id="content">
 	    	<div id="title">Is DreamPress Working?</div>
+	    	
+	    	<p>Please don't give this URL to customers yet! It's a work in progress!</p>
 
 <?php
 
