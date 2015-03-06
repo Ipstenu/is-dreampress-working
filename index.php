@@ -180,7 +180,7 @@ if (!$_POST) {
 			?>
 			<div id="subtitle">Not Exactly</div>
 
-			<p>So here's the deal. Varnish is running, but it can't serve up the cache properly. Why? Check out the red-bombs and yellow-warnings below.</p>
+			<p>Varnish is running, but it can't serve up the cache properly. Why? Check out the red-bombs and yellow-warnings below.</p>
 
 			<?php
 		}
@@ -204,7 +204,7 @@ if (!$_POST) {
 		} else {
 			?><tr>
 				<td width="10px"><?php echo $icon_warning; ?></td>
-				<td>We're not sure if this is a WordPress site... Did you strip the meta tags?</td>
+				<td>We're not sure if this is a WordPress site. Did you strip the meta tags?</td>
 			</tr><?php
 		}
 		
@@ -276,7 +276,7 @@ if (!$_POST) {
 		if ( isset( $varnish_headers['Server'] ) && strpos( $varnish_headers['Server'] ,'cloudflare') !== false ) {
 			?><tr>
 				<td><?php echo $icon_warning; ?></td>
-				<td>You're using Cloudflare and may experience some cache oddities.</td>
+				<td>You're using CloudFlare and may experience some cache oddities. <a href="cloudflare.php">Read More</a></td>
 			</tr><?php
 		}
 
