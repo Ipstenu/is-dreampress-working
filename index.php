@@ -51,6 +51,8 @@ if (!$_POST) {
 	?>
 
 	<p>So you have a site hosted on DreamPress and you're not sure if it's working right or caching fully? Let us help!</p>
+	
+	<div style="margin: 30px;font-weight: bold;font-size: 18pt;">Check a site!</div>
 
 	<?php
 } elseif (!$_POST['url']) {
@@ -400,12 +402,14 @@ if (!$_POST) {
 				?>
 			</table>
 
+			<div style="margin: 30px;font-weight: bold;font-size: 18pt;">Check another site!</div>
+
 	    <?php
 		}
 	}
 }
 ?>
-    <div style="margin: 30px;font-weight: bold;font-size: 18pt;">Check another site!</div>
+
 
 	<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">
           <input name="url" id="url" value="" type="text">
