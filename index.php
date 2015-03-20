@@ -327,11 +327,11 @@ if (!$_POST) {
 			if( !isset($varnish_headers['Cache-Control']) || strpos($varnish_headers['Cache-Control'], 'max-age') === FALSE ) {
 			?><tr>
 				<td><?php echo $icon_warning; ?></td>
-				<td>The "Age" header is set to less than 1, which means you checked right when Varnish cleared it's cache for that url, or for whatever reason Varnish is not actually serving the content for that url from cache. Check again (hit refresh) but if it happens again, it could be one of the following reasons:
+				<td>The "Age" header is set to less than 1, which means you checked right when Varnish cleared it's cache for that url, or for whatever reason Varnish is not actually serving the content for that url from cache. Check again (hit the recheck button below) but if it happens again, it could be one of the following reasons:
 					<ul style=\"text-align: left;\">
 						<li>That url is excluded from the cache on purpose in the Varnish vcl file (in which case, yay! It's working.)</li>
-						<li>The application is sending cache headers that are telling Varnish not to serve that content from cache. This means you'll have to fix the cache headers the application is sending to Varnish. A lot of the time those headers are Cache-Control and/or Expires.</li>
-						<li>The application is setting a session cookie, which can prevent Varnish from serving content from cache. This means you'll have to update the application and make it not send a session cookie for anonymous traffic.</li>
+						<li>A theme or plugin is sending cache headers that are telling Varnish not to serve that content from cache. This means you'll have to fix the cache headers the application is sending to Varnish. A lot of the time those headers are Cache-Control and/or Expires.</li>
+						<li>A theme or plugin is setting a session cookie, which can prevent Varnish from serving content from cache. This means you'll have to update the application and make it not send a session cookie for anonymous traffic.</li>
 						<li>Drunk robots.</li>
 					</ul>
 				</td>
