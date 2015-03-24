@@ -38,9 +38,9 @@ $filename=$_SERVER["PHP_SELF"];
 // Icons
 $icon_awesome	= '<i class="fa fa-heartbeat" style="color:#FF0099;"></i>';
 $icon_good 		= '<i class="fa fa-beer" style="color:#008000;"></i>';
-$icon_warning 	= '<i class="fa fa-exclamation-triangle" style="color:#FFD700"></i>';
-$icon_awkward	= '<i class="fa fa-meh-o" style="color:#FFD700;"></i>';
-$icon_bad		= '<i class="fa fa-bomb" style="color:#FF9933;"></i>';
+$icon_warning 	= '<i class="fa fa-exclamation-triangle" style="color:#FF9933"></i>';
+$icon_awkward	= '<i class="fa fa-meh-o" style="color:#FF0099;"></i>';
+$icon_bad		= '<i class="fa fa-bomb" style="color:#990000;"></i>';
 
 /*
  * The Form
