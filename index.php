@@ -39,6 +39,7 @@ $filename=$_SERVER["PHP_SELF"];
 $icon_good 		= '<i class="fa fa-beer" style="color:#008000;"></i>';
 $icon_warning 	= '<i class="fa fa-exclamation-triangle" style="color:#FFD700"></i>';
 $icon_bad		= '<i class="fa fa-bomb" style="color:#FF0000;"></i>';
+$icon_awesome	= '<i class="fa fa-heartbeat" style="color:#FF0099;"></i>';
 
 /*
  * The Form
@@ -223,6 +224,16 @@ if (!$_POST) {
 				<td>Server shows as nginx. DreamPress is Apache. That ain't right...</td>
 			</tr><?php		
 			}	
+		}
+		
+		// HHVM
+		if ( isset( $varnish_headers['X-Powered-By'] ) ) {
+			if ( strpos( $varnish_headers['X-Powered-By'] ,'HHVM') !== false ) {
+			?><tr>
+				<td><?php echo $icon_awesome; ?></td>
+				<td>You are so awesome! You're on HHVM!</td>
+			</tr><?php
+			}
 		}
 
 		// DNS
