@@ -32,11 +32,9 @@
 	    	
 	    	<h2>Make WordPress use WWW</h2>
 	    	
-	    	<ol>
-		    	<li>Go to WP Admin -> Settings -> General</li>
-		    	<li>Change both the home and site URLs to http://www.example.com/</li>
-		    	<li>Do a search/replace of all your post content to change everything to use www</li>
-	    	</ol>
+	    	<p>1. Go to WP Admin -> Settings -> General
+		    <br />2. Change both the home and site URLs to http://www.example.com/
+		    <br />3. Do a search/replace of all your post content to change everything to use www</p>
 	    	
 	    	<p>That last one may be hard. If you use SSH, we make it easy on DreamPress. Just log in and type this:</p>
 	    	<pre>
@@ -45,6 +43,12 @@
 	    	
 	    	<p>Check the output. If everything looks okay run it again without <code>--dry-run</code> at the end.</p>
 	    	<p>If you need a plugin, we suggest <a href="https://wordpress.org/plugins/better-search-replace/">Better Search Replace</a>.</p>
+	    	
+	    	<p>Then check to make sure that the Varnish IP is set properly. If you've chosen to use our panel to configure CloudFlare then this will be handled automatically:</p>
+		    	
+		    <pre>
+			    wp option get vhp_varnish_ip
+		    </pre>
 	    	
 	    	<h2>If you're NOT using Panel...</h2>
 	    	
