@@ -36,10 +36,11 @@
 $filename=$_SERVER["PHP_SELF"];
 
 // Icons
+$icon_awesome	= '<i class="fa fa-heartbeat" style="color:#FF0099;"></i>';
 $icon_good 		= '<i class="fa fa-beer" style="color:#008000;"></i>';
 $icon_warning 	= '<i class="fa fa-exclamation-triangle" style="color:#FFD700"></i>';
-$icon_bad		= '<i class="fa fa-bomb" style="color:#FF0000;"></i>';
-$icon_awesome	= '<i class="fa fa-heartbeat" style="color:#FF0099;"></i>';
+$icon_awkward	= '<i class="fa fa-meh-o" style="color:#FFD700;"></i>';
+$icon_bad		= '<i class="fa fa-bomb" style="color:#FF9933;"></i>';
 
 /*
  * The Form
@@ -215,16 +216,25 @@ if (!$_POST) {
 		if ( isset( $varnish_headers['Server'] ) ) {
 			if ( strpos( $varnish_headers['Server'] ,'Pagely') !== false ) {
 			?><tr>
-				<td><?php echo $icon_bad; ?></td>
+				<td><?php echo $icon_awkward; ?></td>
 				<td>This site is on Pagely, bro.</td>
 			</tr><?php
 			} elseif ( strpos( $varnish_headers['Server'] ,'nginx') !== false && strpos( $varnish_headers['Server'] ,'cloudflare') == false ) {
 			?><tr>
-				<td><?php echo $icon_bad; ?></td>
+				<td><?php echo $icon_awkward; ?></td>
 				<td>Server shows as nginx. DreamPress is Apache. That ain't right...</td>
 			</tr><?php		
 			}	
 		}
+		
+		// Hacker
+		if ( isset( $varnish_headers['X-hacker'] ) ) {
+			if ( strpos( $varnish_headers['X-hacker'] ,'automattic') !== false ) {
+			?><tr>
+				<td><?php echo $icon_awkward; ?></td>
+				<td>This site is on WordPress.com.</td>
+			</tr><?php
+			}
 		
 		// HHVM
 		if ( isset( $varnish_headers['X-Powered-By'] ) ) {
