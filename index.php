@@ -235,6 +235,7 @@ if (!$_POST) {
 				<td>This site is on WordPress.com.</td>
 			</tr><?php
 			}
+		}
 		
 		// HHVM
 		if ( isset( $varnish_headers['X-Powered-By'] ) ) {
