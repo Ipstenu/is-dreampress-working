@@ -198,6 +198,24 @@ if (!$_POST) {
 		 * We're going to do some extra checks to make sure this is WordPress and that everything's above board.
 		 */
 
+		// VARNISH
+		if ( isset( $varnish_headers['X-Cacheable'] ) && strpos( $varnish_headers['X-Cacheable'] ,'YES') !== false ) {
+			?><tr>
+				<td><?php echo $icon_good; ?></td>
+				<td>Varnish is running properly so caching is happening.</td>
+			</tr><?php
+		} elseif (isset( $varnish_headers['X-Cacheable'] ) && strpos( $varnish_headers['X-Cacheable'] ,'NO') !== false ) {
+			?><tr>
+				<td><?php echo $icon_bad; ?></td>
+				<td>Varnish is running but can't cache.</td>
+			</tr><?php
+		} else {
+			?><tr>
+				<td><?php echo $icon_warning; ?></td>
+				<td>We can't find Varnish on this server.</td>
+			</tr><?php
+		}
+
 		// WORDPRESS
 		$tags = get_meta_tags($varnish_url);
 		if ( isset($tags['generator']) && strpos( $tags['generator'] ,'WordPress') !== false ) {
@@ -212,27 +230,42 @@ if (!$_POST) {
 			</tr><?php
 		}
 		
-		// SERVER
+		/* Let's see who your host is */
+		
+		// SERVER (nginx, pagely)
 		if ( isset( $varnish_headers['Server'] ) ) {
+			// nginx
+			if ( strpos( $varnish_headers['Server'] ,'nginx') !== false && strpos( $varnish_headers['Server'] ,'cloudflare') !== false ) {
+			?><tr>
+				<td><?php echo $icon_awkward; ?></td>
+				<td>Your server is on nginx and DreamPress is Apache only. Something's weird...</td>
+			</tr><?php		
+			} 
+			// Pagely
 			if ( strpos( $varnish_headers['Server'] ,'Pagely') !== false ) {
 			?><tr>
 				<td><?php echo $icon_awkward; ?></td>
-				<td>This site is on Pagely, bro.</td>
+				<td>This site is on Pagely, not <a href="https://www.dreamhost.com/hosting/wordpress/">DreamPress</a>.</td>
 			</tr><?php
-			} elseif ( strpos( $varnish_headers['Server'] ,'nginx') !== false && strpos( $varnish_headers['Server'] ,'cloudflare') == false ) {
-			?><tr>
-				<td><?php echo $icon_awkward; ?></td>
-				<td>Server shows as nginx. DreamPress is Apache. That ain't right...</td>
-			</tr><?php		
 			}	
 		}
 		
-		// Hacker
+		// X-HACKER (Automattic)
 		if ( isset( $varnish_headers['X-hacker'] ) ) {
 			if ( strpos( $varnish_headers['X-hacker'] ,'automattic') !== false ) {
 			?><tr>
 				<td><?php echo $icon_awkward; ?></td>
-				<td>This site is on WordPress.com.</td>
+				<td>This site is on WordPress.com which is cool, but you ain't on <a href="https://www.dreamhost.com/hosting/wordpress/">DreamPress</a>.</td>
+			</tr><?php
+			}
+		}
+
+		// X-BACKEND (GoDaddy)
+		if ( isset( $varnish_headers['X-Backend'] ) ) {
+			if ( strpos( $varnish_headers['X-Backend'] ,'wpaas_web_') !== false ) {
+			?><tr>
+				<td><?php echo $icon_awkward; ?></td>
+				<td>This site is on GoDaddy. Have you met <a href="https://www.dreamhost.com/hosting/wordpress/">DreamPress</a>?</td>
 			</tr><?php
 			}
 		}
@@ -257,12 +290,17 @@ if (!$_POST) {
 			}
 			if ( isset( $nsrecords ) && strpos( $nsrecords ,'dreamhost') !== false ) {
 				?><tr>
-					<td><?php echo $icon_good; ?></td>
-					<td>Huzzah! DreamHost's nameservers are in use:<br /><?php echo $nsrecords; ?></td>
+					<td><?php echo $icon_awesome; ?></td>
+					<td>Huzzah! DreamHost's nameservers are in use.<br /><?php echo $nsrecords; ?></td>
 				</tr><?php
+			} elseif ( strpos( $nsrecords ,'cloudflare') !== false ) {
+				?><tr>
+					<td><?php echo $icon_good; ?></td>
+					<td>You're using CloudFlare's DNS. Smart choice!<br /><?php echo $nsrecords; ?></td>
+				</tr><?php				
 			} elseif ( empty( $nsrecords ) ) {
 				?><tr>
-					<td><?php echo $icon_warning; ?></td>
+					<td><?php echo $icon_awkward; ?></td>
 					<td>We can't detect your name servers. Ours are ns1.dreamhost.com, ns2.dreamhost.com, ns3.dreamhost.com</td>
 				</tr><?php
 			} else {
@@ -276,24 +314,6 @@ if (!$_POST) {
 				</tr>
 				<?php
 			}
-		}
-
-		// VARNISH
-		if ( isset( $varnish_headers['X-Cacheable'] ) && strpos( $varnish_headers['X-Cacheable'] ,'YES') !== false ) {
-			?><tr>
-				<td><?php echo $icon_good; ?></td>
-				<td>Varnish is running properly so caching is happening.</td>
-			</tr><?php
-		} elseif (isset( $varnish_headers['X-Cacheable'] ) && strpos( $varnish_headers['X-Cacheable'] ,'NO') !== false ) {
-			?><tr>
-				<td><?php echo $icon_bad; ?></td>
-				<td>Varnish is running but can't cache.</td>
-			</tr><?php
-		} else {
-			?><tr>
-				<td><?php echo $icon_warning; ?></td>
-				<td>We can't find Varnish on this server.</td>
-			</tr><?php
 		}
 
 		// CLOUDFLARE
