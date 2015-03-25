@@ -280,7 +280,7 @@ if (!$_POST) {
 			}
 		}
 
-		// DNS
+		// DNS - Check for DH and CloudFlare specifically
 		$nameservers = dns_get_record($varnish_host, DNS_NS );
 		$ip = gethostbyname($varnish_host);
 		if ( isset( $nameservers ) && is_array( $nameservers )  ) {
@@ -296,8 +296,15 @@ if (!$_POST) {
 			} elseif ( strpos( $nsrecords ,'cloudflare') !== false ) {
 				?><tr>
 					<td><?php echo $icon_good; ?></td>
-					<td>You're using CloudFlare's DNS. Smart choice!<br /><?php echo $nsrecords; ?></td>
-				</tr><?php				
+					<td>You're using CloudFlare's DNS. Smart choice!<br /><?php echo $nsrecords; ?>
+				<?php
+				// Secondary Cloudflare
+				if ( isset( $varnish_headers['Server'] ) && strpos( $varnish_headers['Server'] ,'cloudflare') !== false ) {
+					?><br/>Because CloudFlare is running, you <em>may</em> experience some cache oddities. <a href="cloudflare.php">Read More</a>
+				<?php
+				} ?>
+				</td>
+				</tr><?php
 			} elseif ( empty( $nsrecords ) ) {
 				?><tr>
 					<td><?php echo $icon_awkward; ?></td>
@@ -315,15 +322,6 @@ if (!$_POST) {
 				<?php
 			}
 		}
-
-		// CLOUDFLARE
-		if ( isset( $varnish_headers['Server'] ) && strpos( $varnish_headers['Server'] ,'cloudflare') !== false ) {
-			?><tr>
-				<td><?php echo $icon_warning; ?></td>
-				<td>You're using CloudFlare and may experience some cache oddities. <a href="cloudflare.php">Read More</a></td>
-			</tr><?php
-		}
-
 
 		// PAGESPEED
 		if ( isset( $varnish_headers['X-Mod-Pagespeed'] ) ) {
