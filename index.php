@@ -29,6 +29,8 @@
 	    	<div id="title">Is DreamPress Working?</div>
 	    	
 	    	<p><strong>Please don't give this URL to customers yet! It's a work in progress!</strong> Let Mika know if you think it needs fixings.</p>
+	    	
+	    	<p>Last Updated: April 1, 2015</p>
 
 <?php
 
@@ -87,7 +89,7 @@ if (!$_POST) {
 
 	// Is it a real URL?
 
-	// Call StrictURLValidator becuase FILTER_VALIDATE_URL things http://foo is okay, even when you tell it you want the damn host.
+	// Call StrictURLValidator becuase FILTER_VALIDATE_URL thinks http://foo is okay, even when you tell it you want the damn host.
 	require_once 'StrictUrlValidator.php';
 
 	// If we're SSL, bail early
@@ -220,7 +222,7 @@ if (!$_POST) {
 		$tags = get_meta_tags($varnish_url);
 		if ( isset($tags['generator']) && strpos( $tags['generator'] ,'WordPress') !== false ) {
 			?><tr>
-				<td width="10px"><?php echo $icon_good; ?></td>
+				<td width="10px"><?php echo $icon_awesome; ?></td>
 				<td>This is a WordPress site!</td>
 			</tr><?php
 		} else {
@@ -325,10 +327,17 @@ if (!$_POST) {
 
 		// PAGESPEED
 		if ( isset( $varnish_headers['X-Mod-Pagespeed'] ) ) {
-			?><tr>
-				<td><?php echo $icon_warning; ?></td>
-				<td>Mod Pagespeed is active. Make sure you've turned off caching headers! <a href="http://wiki.dreamhost.com/DreamPress#Can_I_use_PageSpeed_and_Varnish_together.3F">Don't know how? Read this!</a></td>
-			</tr><?php
+			if ( strpos( $varnish_headers['X-Cacheable'] , 'YES:Forced') !== false ) {
+				?><tr>
+					<td><?php echo $icon_good; ?></td>
+					<td>Mod Pagespeed is active and working properly with Varnish.</td>
+				</tr><?php
+			} else {
+				?><tr>
+					<td><?php echo $icon_bad; ?></td>
+					<td>Mod Pagespeed is active but it looks like your caching headers aren't right. <a href="pagespeed.php">Don't know how to fix that? Read this!</a></td>
+				</tr><?php
+			}
 		}
 
 		// SET COOKIE
@@ -431,7 +440,7 @@ if (!$_POST) {
 			<p>Here are some more gory details about the site:</p>
 
 			<table id="headers">
-				<tr><td width="200px" style="text-align:right;">The url we checked:</td><td><?php echo $varnish_host; ?></td></tr>
+				<tr><td width="200px" style="text-align:right;">The url we checked:</td><td><a href="http://<?php echo $varnish_host; ?>"><?php echo $varnish_host; ?></a></td></tr>
 				<tr><td width="200px">&nbsp;</td><td><?php echo $varnish_headers[0]; ?></td></tr>
 				<?php
 				foreach ($varnish_headers as $header => $key ) {
