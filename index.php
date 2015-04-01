@@ -256,6 +256,7 @@ if (!$_POST) {
 				<td><?php echo $icon_warning; ?></td>
 				<td>Because CloudFlare is running, you <em>may</em> experience some cache oddities. <a href="cloudflare.php">Read More</a></td>
 			</tr><?php
+			}
 		}
 		
 		// X-HACKER (Automattic)
