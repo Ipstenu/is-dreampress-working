@@ -249,7 +249,13 @@ if (!$_POST) {
 				<td><?php echo $icon_awkward; ?></td>
 				<td>This site is on Pagely, not <a href="https://www.dreamhost.com/hosting/wordpress/">DreamPress</a>.</td>
 			</tr><?php
-			}	
+			}
+			// Secondary Cloudflare
+			if ( isset( $varnish_headers['Server'] ) && strpos( $varnish_headers['Server'] ,'cloudflare') !== false ) {
+			?><tr>
+				<td><?php echo $icon_warning; ?></td>
+				<td>Because CloudFlare is running, you <em>may</em> experience some cache oddities. <a href="cloudflare.php">Read More</a></td>
+			</tr><?php
 		}
 		
 		// X-HACKER (Automattic)
@@ -272,6 +278,8 @@ if (!$_POST) {
 			}
 		}
 		
+		/* Advanced checking */
+		
 		// HHVM
 		if ( isset( $varnish_headers['X-Powered-By'] ) ) {
 			if ( strpos( $varnish_headers['X-Powered-By'] ,'HHVM') !== false ) {
@@ -281,6 +289,8 @@ if (!$_POST) {
 			</tr><?php
 			}
 		}
+		
+		/* Big Fat DNS */
 
 		// DNS - Check for DH and CloudFlare specifically
 		$nameservers = dns_get_record($varnish_host, DNS_NS );
@@ -298,14 +308,7 @@ if (!$_POST) {
 			} elseif ( strpos( $nsrecords ,'cloudflare') !== false ) {
 				?><tr>
 					<td><?php echo $icon_good; ?></td>
-					<td>You're using CloudFlare's DNS. Smart choice!<br /><?php echo $nsrecords; ?>
-				<?php
-				// Secondary Cloudflare
-				if ( isset( $varnish_headers['Server'] ) && strpos( $varnish_headers['Server'] ,'cloudflare') !== false ) {
-					?><br/>Because CloudFlare is running, you <em>may</em> experience some cache oddities. <a href="cloudflare.php">Read More</a>
-				<?php
-				} ?>
-				</td>
+					<td>You're using CloudFlare's DNS. Smart choice!<br /><?php echo $nsrecords; ?></td>
 				</tr><?php
 			} elseif ( empty( $nsrecords ) ) {
 				?><tr>
@@ -325,6 +328,8 @@ if (!$_POST) {
 			}
 		}
 
+		/* Server features */
+
 		// PAGESPEED
 		if ( isset( $varnish_headers['X-Mod-Pagespeed'] ) ) {
 			if ( strpos( $varnish_headers['X-Cacheable'] , 'YES:Forced') !== false ) {
@@ -339,6 +344,8 @@ if (!$_POST) {
 				</tr><?php
 			}
 		}
+
+		/* Shit that breaks Varnish */
 
 		// SET COOKIE
 		if ( isset( $varnish_headers['Set-Cookie'] ) ) {
@@ -458,7 +465,6 @@ if (!$_POST) {
 	}
 }
 ?>
-
 
 	<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">
           <input name="url" id="url" value="" type="text">
