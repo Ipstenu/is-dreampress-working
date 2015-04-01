@@ -203,17 +203,17 @@ if (!$_POST) {
 		// VARNISH
 		if ( isset( $varnish_headers['X-Cacheable'] ) && strpos( $varnish_headers['X-Cacheable'] ,'YES') !== false ) {
 			?><tr>
-				<td><?php echo $icon_good; ?></td>
+				<td width="10px"><?php echo $icon_good; ?></td>
 				<td>Varnish is running properly so caching is happening.</td>
 			</tr><?php
 		} elseif (isset( $varnish_headers['X-Cacheable'] ) && strpos( $varnish_headers['X-Cacheable'] ,'NO') !== false ) {
 			?><tr>
-				<td><?php echo $icon_bad; ?></td>
+				<td width="10px"><?php echo $icon_bad; ?></td>
 				<td>Varnish is running but can't cache.</td>
 			</tr><?php
 		} else {
 			?><tr>
-				<td><?php echo $icon_warning; ?></td>
+				<td width="10px"><?php echo $icon_warning; ?></td>
 				<td>We can't find Varnish on this server.</td>
 			</tr><?php
 		}
