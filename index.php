@@ -388,7 +388,7 @@ if (!$_POST) {
 					<ul style=\"text-align: left;\">
 						<li>That url is excluded from the cache on purpose in the Varnish vcl file (in which case, yay! It's working.)</li>
 						<li>A theme or plugin is sending cache headers that are telling Varnish not to serve that content from cache. This means you'll have to fix the cache headers the application is sending to Varnish. A lot of the time those headers are Cache-Control and/or Expires.</li>
-						<li>A theme or plugin is setting a session cookie, which can prevent Varnish from serving content from cache. This means you'll have to update the application and make it not send a session cookie for anonymous traffic.</li>
+						<li>A theme or plugin is setting a session cookie, which can prevent Varnish from serving content from cache. This means you'll have to update the application and make it not send a session cookie for anonymous traffic. (<a href="phpsessid.php">Need help debugging php sessions?</a>)</li>
 						<li>Drunk robots.</li>
 					</ul>
 				</td>

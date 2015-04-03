@@ -30,12 +30,12 @@
 	    	
 	    	<p>PageSpeed does a lot of pre-caching for you, generally by minifying and compressing CSS, JS and HTML. In order for it to work properly with Varnish, you must add the following to your .htaccess:</p>
 		    	
-		    <pre>
-			    <IfModule pagespeed_module>
-					ModPagespeed on
-					ModPagespeedModifyCachingHeaders off
-				</IfModule>
-		    </pre>
+<pre><code>
+&lt;IfModule pagespeed_module&gt;
+	ModPagespeed on
+	ModPagespeedModifyCachingHeaders off
+&lt;/IfModule&gt;
+</code></pre>
 	    	
       </div><!-- end content -->
       <div id="footer">
