@@ -30,7 +30,7 @@
 	    	
 	    	<p><strong>Please don't give this URL to customers yet! It's a work in progress!</strong> Let Mika know if you think it needs fixings.</p>
 	    	
-	    	<p>Last Updated: April 1, 2015</p>
+	    	<p>Last Updated: April 3, 2015</p>
 
 <?php
 
