@@ -30,7 +30,7 @@
 	    	
 	    	<p><strong>Please don't give this URL to customers yet! It's a work in progress!</strong> Let Mika know if you think it needs fixings.</p>
 	    	
-	    	<p>Last Updated: April 3, 2015</p>
+	    	<p>Last Updated: April 9, 2015</p>
 
 <?php
 
@@ -433,12 +433,14 @@ if (!$_POST) {
 
 		<p>&nbsp;</p>
 
+		<center>
 		<p>
 		<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">
 	          <input name="url" id="url" value="<?php if (isset($varnish_host)) { echo $varnish_host; } ?>" type="hidden">
 	          <input name="check_it" id="check_it" value="Recheck!" type="submit">
 	    </form>
 		</p>
+		</center>
 
 		<?php
 		// No matter what, we're going to show the headers etc. right? Wrong! If it wasn't a valid URL, we shouldn't
@@ -459,7 +461,7 @@ if (!$_POST) {
 				?>
 			</table>
 
-			<div style="margin: 30px;font-weight: bold;font-size: 18pt;">Check another site!</div>
+			<center><div style="margin: 30px;font-weight: bold;font-size: 18pt;">Check another site!</div></center>
 
 	    <?php
 		}
@@ -467,10 +469,12 @@ if (!$_POST) {
 }
 ?>
 
+	<center>
 	<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">
           <input name="url" id="url" value="" type="text">
           <input name="check_it" id="check_it" value="Check It!" type="submit">
     </form>
+	</center>
 
       </div><!-- end content -->
       <div id="footer">
