@@ -30,7 +30,7 @@
 	    	
 	    	<p><strong>Please don't give this URL to customers yet! It's a work in progress!</strong> Let Mika know if you think it needs fixings.</p>
 	    	
-	    	<p>Last Updated: April 9, 2015</p>
+	    	<p>Last Updated: April 15, 2015</p>
 
 <?php
 
@@ -356,20 +356,29 @@ if (!$_POST) {
 					<td><?php echo $icon_bad; ?></td>
 					<td>You're setting a PHPSESSID cookie. This makes Varnish not deliver cached pages. (<a href="phpsessid.php">Need help debugging php sessions?</a>)</td>
 				</tr><?php
-			} elseif ( strpos( $varnish_headers['Set-Cookie'], 'edd_wp_session' ) !== false ) {
+			}
+			if ( strpos( $varnish_headers['Set-Cookie'], 'edd_wp_session' ) !== false ) {
 				?><tr>
 					<td><?php echo $icon_bad; ?></td>
-					<td>We've spotted Easy Digital Downloads being used with cookie sessions. This causes your cache to misbehave. Please set <code>define( 'EDD_USE_PHP_SESSIONS', true );</code> in your <code>wp-config.php</code> file.</td>
+					<td>We've spotted <a href="https://wordpress.org/plugins/easy-digital-downloads/">Easy Digital Downloads</a> being used with cookie sessions. This causes your cache to misbehave. Please set <code>define( 'EDD_USE_PHP_SESSIONS', true );</code> in your <code>wp-config.php</code> file.</td>
 				</tr><?php
-			} elseif ( strpos( $varnish_headers['Set-Cookie'], 'edd_items_in_cart' ) !== false ) {
+			}
+			if ( strpos( $varnish_headers['Set-Cookie'], 'edd_items_in_cart' ) !== false ) {
 				?><tr>
 					<td><?php echo $icon_warning; ?></td>
-					<td>Avast! We spy Easy Digital Downloads. When customers add items to their cart, they'll no longer be using cached pages. Thought you ought to know.</td>
+					<td>Avast! We spy <a href="https://wordpress.org/plugins/easy-digital-downloads/">Easy Digital Downloads</a>. When customers add items to their cart, they'll no longer be using cached pages. Thought you ought to know.</td>
 				</tr><?php				
-			} elseif ( strpos( $varnish_headers['Set-Cookie'], 'wfvt_' ) !== false ) {
+			}
+			if ( strpos( $varnish_headers['Set-Cookie'], 'wfvt_' ) !== false ) {
 				?><tr>
 					<td><?php echo $icon_bad; ?></td>
-					<td>WordFence is putting down cookies on every page load. Please disable that in your options (available from version 4.0.4 and up)</td>
+					<td>The plugin <a href="https://wordpress.org/plugins/wordfence">WordFence</a> is putting down cookies on every page load. Please disable that in your options (available from version 4.0.4 and up)</td>
+				</tr><?php
+			}
+			if ( strpos( $varnish_headers['Set-Cookie'], 'invite-anyone' ) !== false ) {
+				?><tr>
+					<td><?php echo $icon_bad; ?></td>
+					<td><a href="https://wordpress.org/plugins/invite-anyone/">Invite Anyone</a>, a plugin for BuddyPress, is putting down a cookie on every page load. This will prevent Varnish from caching :(</td>
 				</tr><?php
 			}
 		}
