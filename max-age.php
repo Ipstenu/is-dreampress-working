@@ -19,32 +19,24 @@
 	<link href="assets/images/favicons/apple-touch-icon-152x152.png" sizes="152x152" rel="apple-touch-icon"></link>
 	<link rel="icon" href="assets/images/favicons/favicon.ico">
 
-    <title>What's the deal with PHPSESSID?</title>
+    <title>What's the deal with max-age headers?</title>
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="assets/style.css" type="text/css" media="screen" title="no title" charset="utf-8">
   </head>
   <body>
     <div id="container">
 		<div id="content">
-	    	<div id="title">What's the deal with PHPSESSID?</div>
+	    	<div id="title">What's the deal with max-age headers?</div>
 	    	
-	    	<p>Any time a plugin or theme makes use of PHP Sessions and gives a new session to every user, it will cause performance issues with Varnish. For certain plugins (like ecommerce ones), we have configured our servers to be more forgiving, and any well-coded plugin will be okay. If used correctly, Sessions isn't that evil, as it's similar to using a cookie when a user needs one. It's telling Varnish not to cache information that shouldn't be cached. It would be BETTER if the plugin used cookies, of course, but those too tell the site not to be cached!</p>
-
-			<p>You can scan for sessions by a simple Grep:</p>
-
-			<pre>
-grep -Ri "PHPSESSID" ./wp-content/plugins ; grep -Ri "session_start" ./wp-content/plugins ; grep -Ri "start_session" ./wp-content/plugins
-grep -Ri "PHPSESSID" ./wp-content/themes ; grep -Ri "session_start" ./wp-content/themes ; grep -Ri "start_session" ./wp-content/themes
-			</pre>
-
-			<p>NOTE: DreamObjects has this code, but does not use it. It's part of the SDK so don't worry about that.</p>
-
-			<p>If you want to check in a specific theme, it's fastest to just CD into that theme folder (wp theme status, pick the green one ;) ) and do this:</p>
-
-			<pre>grep -Ri "PHPSESSID" . ; grep -Ri "session_start" . ; grep -Ri "start_session" .</pre>
-
-			<p>Sometimes it's okay to use PHPSESSID or PHP Sessions, and sometimes it's not. This is really confusing and is best explained via examples. Keep in mind, even if we DO track it down to a point where we're reasonable sure the plugin or theme is the problem, you will still want to verify by turning off that plugin or switching themes. This is, in fact, why we always test WP that way. Once you narrow down what might be the cause, you can turn off plugins selectively, for greater results.</p>
-	    	
+	    	<p>'max-age' is a header call that's sent via cache-control that determines how old the page can be before cache needs to delete it's copy and generate a new one. If max-age is 0 (or set to some date like 1981), then it will tell Varnish and your browser cache to not cache a page, and always spin up a new copy.</p>
+	    		    	
+	    	<p>The basic grep to find these is as follows:</p>
+		    	
+		    <pre>grep -R "max-age=0" .</pre>
+			
+			<p>Sadly, many javascript libraries put this in as well and they are <em>not</em> detectable in a sane way.</p>
+			
+			<p>The best way to debug an issue like this is to disable plugins, rerun the test, and then start reenabling them one at a time until it happens again.</p>
 	    	
       </div><!-- end content -->
       <div id="footer">

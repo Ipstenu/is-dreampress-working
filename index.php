@@ -30,7 +30,9 @@
 	    	
 	    	<p><strong>Please don't give this URL to customers yet! It's a work in progress!</strong> Let Mika know if you think it needs fixings.</p>
 	    	
-	    	<p>Last Updated: April 15, 2015</p>
+	    	<p>To use this properly, fill in the URL of the site and click the "Check It!" button. Go over the detailed results. Many have links to additional information. Hint. Hint. Read and follow the information to debug.</p>
+	    	
+	    	<p>Last Updated: May 1, 2015</p>
 
 <?php
 
@@ -314,7 +316,7 @@ if (!$_POST) {
 			} elseif ( empty( $nsrecords ) ) {
 				?><tr>
 					<td><?php echo $icon_awkward; ?></td>
-					<td>We can't detect your name servers. Ours are ns1.dreamhost.com, ns2.dreamhost.com, ns3.dreamhost.com</td>
+					<td>We can't detect your name servers because the PHP check is imperfect. Just make sure you're using ours: ns1.dreamhost.com, ns2.dreamhost.com, ns3.dreamhost.com</td>
 				</tr><?php
 			} else {
 				?><tr>
@@ -323,29 +325,11 @@ if (!$_POST) {
 				</tr>
 				<tr>
 					<td><?php echo $icon_warning; ?></td>
-					<td>IP address is set to <?php echo $ip; ?> - Make sure that matches what Panel's DNS entry thinks it should be.</td>
+					<td>Your IP address is set to <?php echo $ip; ?> - Make sure that matches what Panel's DNS entry thinks it should be.</td>
 				</tr>
 				<?php
 			}
-		}
-
-		/* Server features */
-
-		// PAGESPEED
-		if ( isset( $varnish_headers['X-Mod-Pagespeed'] ) ) {
-			if ( strpos( $varnish_headers['X-Cacheable'] , 'YES:Forced') !== false ) {
-				?><tr>
-					<td><?php echo $icon_good; ?></td>
-					<td>Mod Pagespeed is active and working properly with Varnish.</td>
-				</tr><?php
-			} else {
-				?><tr>
-					<td><?php echo $icon_bad; ?></td>
-					<td>Mod Pagespeed is active but it looks like your caching headers aren't right. <a href="pagespeed.php">Don't know how to fix that? Read this!</a></td>
-				</tr><?php
-			}
-		}
-
+		
 		/* Shit that breaks Varnish */
 
 		// SET COOKIE
@@ -409,7 +393,7 @@ if (!$_POST) {
 		if ( isset( $varnish_headers['Cache-Control'] ) && strpos( $varnish_headers['Cache-Control'] ,'no-cache') !== false ) {
 			?><tr>
 				<td><?php echo $icon_bad; ?></td>
-				<td>Something is setting the header Cache-Control to 'no-cache' which means visitors will never get cached pages.</td>
+				<td>Something is setting the header Cache-Control to 'no-cache' which means visitors will never get cached pages. (<a href="no-cache.php">Need help debugging no-cache headers?</a>)</td>
 			</tr><?php
 		}
 
@@ -417,7 +401,7 @@ if (!$_POST) {
 		if ( isset( $varnish_headers['Cache-Control'] ) && strpos( $varnish_headers['Cache-Control'] ,'max-age=0') !== false ) {
 			?><tr>
 				<td><?php echo $icon_bad; ?></td>
-				<td>Something is setting the header Cache-Control to 'max-age=0' which means a page can be no older than 0 seconds before it needs to regenerate the cache.</td>
+				<td>Something is setting the header Cache-Control to 'max-age=0' which means a page can be no older than 0 seconds before it needs to regenerate the cache. (<a href="max-age.php">Need help debugging max-age headers?</a>)</td>
 			</tr><?php
 		}
 
@@ -425,7 +409,7 @@ if (!$_POST) {
 		if ( isset( $varnish_headers['Pragma'] ) && strpos( $varnish_headers['Pragma'] ,'no-cache') !== false ) {
 			?><tr>
 				<td><?php echo $icon_bad; ?></td>
-				<td>Something is setting the header Pragma to 'no-cache' which means visitors will never get cached pages.</td>
+				<td>Something is setting the header Pragma to 'no-cache' which means visitors will never get cached pages. (<a href="no-cache.php">Need help debugging no-cache headers?</a>)</td>
 			</tr><?php
 		}
 		
@@ -436,6 +420,23 @@ if (!$_POST) {
 				<td>X-Cache missed, which means it's not able to serve this page as cached.</td>
 			</tr><?php
 		}		
+
+		/* Server features */
+
+		// PAGESPEED
+		if ( isset( $varnish_headers['X-Mod-Pagespeed'] ) ) {
+			if ( strpos( $varnish_headers['X-Cacheable'] , 'YES:Forced') !== false ) {
+				?><tr>
+					<td><?php echo $icon_good; ?></td>
+					<td>Mod Pagespeed is active and working properly with Varnish.</td>
+				</tr><?php
+			} else {
+				?><tr>
+					<td><?php echo $icon_bad; ?></td>
+					<td>Mod Pagespeed is active but it looks like your caching headers may not be right. <a href="pagespeed.php">Don't know how to fix that? Read this!</a> (Note: This may be a false negative if other parts of your site are overwriting headers. Fix all other errors <em>first</em>, then come back to this.)</td>
+				</tr><?php
+			}
+		}
 
 		?>
 		</table>
