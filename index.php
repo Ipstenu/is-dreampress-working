@@ -329,6 +329,7 @@ if (!$_POST) {
 				</tr>
 				<?php
 			}
+		}
 		
 		/* Shit that breaks Varnish */
 
@@ -419,7 +420,7 @@ if (!$_POST) {
 				<td><?php echo $icon_bad; ?></td>
 				<td>X-Cache missed, which means it's not able to serve this page as cached.</td>
 			</tr><?php
-		}		
+		}
 
 		/* Server features */
 
