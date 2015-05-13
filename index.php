@@ -32,7 +32,7 @@
 	    	
 	    	<p>To use this properly, fill in the URL of the site and click the "Check It!" button. Go over the detailed results. Many have links to additional information. Hint. Hint. Read and follow the information to debug.</p>
 	    	
-	    	<p>Last Updated: May 1, 2015</p>
+	    	<p>Last Updated: May 13, 2015</p>
 
 <?php
 
@@ -239,7 +239,7 @@ if (!$_POST) {
 		// SERVER (nginx, pagely)
 		if ( isset( $varnish_headers['Server'] ) ) {
 			// nginx
-			if ( strpos( $varnish_headers['Server'] ,'nginx') !== false && strpos( $varnish_headers['Server'] ,'cloudflare') !== false ) {
+			if ( strpos( $varnish_headers['Server'] ,'nginx') !== false && strpos( $varnish_headers['Server'] ,'cloudflare') == false ) {
 			?><tr>
 				<td><?php echo $icon_awkward; ?></td>
 				<td>Your server is on nginx and DreamPress is Apache only. Something's weird...</td>
@@ -253,7 +253,7 @@ if (!$_POST) {
 			</tr><?php
 			}
 			// Secondary Cloudflare
-			if ( isset( $varnish_headers['Server'] ) && strpos( $varnish_headers['Server'] ,'cloudflare') !== false ) {
+			if ( strpos( $varnish_headers['Server'] ,'cloudflare') !== false ) {
 			?><tr>
 				<td><?php echo $icon_warning; ?></td>
 				<td>Because CloudFlare is running, you <em>may</em> experience some cache oddities. <a href="cloudflare.php">Read More</a></td>
