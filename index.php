@@ -22,6 +22,7 @@
     <title>Is DreamPress working? Find out for sure!</title>
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="assets/style.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <script src='https://www.google.com/recaptcha/api.js'></script>
   </head>
   <body>
     <div id="container">
@@ -32,7 +33,7 @@
 	    	
 	    	<p>To use this properly, fill in the URL of the site and click the "Check It!" button. Go over the detailed results. Many have links to additional information. Hint. Hint. Read and follow the information to debug.</p>
 	    	
-	    	<p>Last Updated: May 13, 2015</p>
+	    	<p>Last Updated: July 10, 2015</p>
 
 <?php
 
@@ -448,6 +449,7 @@ if (!$_POST) {
 		<p>
 		<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">
 	          <input name="url" id="url" value="<?php if (isset($varnish_host)) { echo $varnish_host; } ?>" type="hidden">
+			  <div class="g-recaptcha" data-sitekey="6LfsogkTAAAAAMuZHeO_l9qN3k-V-xhyZkEtM_IE"></div>
 	          <input name="check_it" id="check_it" value="Recheck!" type="submit">
 	    </form>
 		</p>
@@ -483,6 +485,7 @@ if (!$_POST) {
 	<center>
 	<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">
           <input name="url" id="url" value="" type="text">
+          <div class="g-recaptcha" data-sitekey="6LfsogkTAAAAAMuZHeO_l9qN3k-V-xhyZkEtM_IE"></div>
           <input name="check_it" id="check_it" value="Check It!" type="submit">
     </form>
 	</center>
