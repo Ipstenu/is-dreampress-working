@@ -83,9 +83,13 @@ if (!$_POST) {
 	if (isset($_SESSION['last_submit']) && time()-$_SESSION['last_submit'] < 60) {
 	    ?>
 	    
-	    <center><p><img src="assets/images/robot.sleeping.png" style="margin:0 5px 0 0;" width="600" /></p></center>
+	    <p><img src="assets/images/robot.sleeping.png" style="float:left;margin:0 5px 0 0;" width="150" /></p>
 	    
-	    <p>Hold on there, Nelly! You're checking too many sites too fast. Please wait at least 60 seconds and try again.</p>
+	    <p>Hold on there, Nelly! You're checking too many sites too fast.</p>
+	    <p>We get it, though. You want to make sure you fix everything on your site and that it's working perfectly. Before you re-run a test, make sure you've changed everything, uploaded it, <em>and</em> flush Varnish on your server.</p>
+	    <p>You did all that? Cool!</p>
+		<p>Please wait at least 60 seconds and try again.</p>
+	    
 	    <?php
 	}
 	else {
