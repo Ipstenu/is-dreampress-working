@@ -451,18 +451,6 @@ if (!$_POST) {
 		?>
 		</table>
 
-		<p>&nbsp;</p>
-
-		<center>
-		<p>
-		<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">
-	          <input name="url" id="url" value="<?php if (isset($varnish_host)) { echo $varnish_host; } ?>" type="hidden">
-			  <div class="g-recaptcha" data-sitekey="6LfsogkTAAAAAMuZHeO_l9qN3k-V-xhyZkEtM_IE"></div>
-	          <p><input name="check_it" id="check_it" value="Recheck!" type="submit"></p>
-	    </form>
-		</p>
-		</center>
-
 		<?php
 		// No matter what, we're going to show the headers etc. right? Wrong! If it wasn't a valid URL, we shouldn't
 
@@ -492,9 +480,10 @@ if (!$_POST) {
 
 	<center>
 	<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">
-          <input name="url" id="url" value="" type="text">
+          <input name="url" id="url" value="<?php if (isset($varnish_host) ) echo 'http://'.$varnish_host; ?>" type="text">
           <div class="g-recaptcha" data-sitekey="6LfsogkTAAAAAMuZHeO_l9qN3k-V-xhyZkEtM_IE"></div>
-          <p><input name="check_it" id="check_it" value="Check It!" type="submit"></p>
+          <p>&nbsp;</p>
+          <input name="check_it" id="check_it" value="Check It!" type="submit">
     </form>
 	</center>
 
