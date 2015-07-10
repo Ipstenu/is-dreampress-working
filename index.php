@@ -77,6 +77,14 @@ if (!$_POST) {
 
 	// We are a post, we're checking for a URL, let's do the magic!
 
+	// Let's do some basic CYA here to prevent people from being dicks.
+	session_start();
+	
+	if (isset($_SESSION['last_submit']) && time()-$_SESSION['last_submit'] < 60)
+	    die('Post limit exceeded. Please wait at least 60 seconds');
+	else
+	    $_SESSION['last_submit'] = time();
+
 	// Sanitize the URL
 	$varnish_url  = (string) rtrim( filter_var($_POST['url'], FILTER_SANITIZE_URL), '/' );
 	$varnish_url = (string) $_POST['url'];
@@ -450,7 +458,7 @@ if (!$_POST) {
 		<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">
 	          <input name="url" id="url" value="<?php if (isset($varnish_host)) { echo $varnish_host; } ?>" type="hidden">
 			  <div class="g-recaptcha" data-sitekey="6LfsogkTAAAAAMuZHeO_l9qN3k-V-xhyZkEtM_IE"></div>
-	          <input name="check_it" id="check_it" value="Recheck!" type="submit">
+	          <p><input name="check_it" id="check_it" value="Recheck!" type="submit"></p>
 	    </form>
 		</p>
 		</center>
@@ -486,7 +494,7 @@ if (!$_POST) {
 	<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">
           <input name="url" id="url" value="" type="text">
           <div class="g-recaptcha" data-sitekey="6LfsogkTAAAAAMuZHeO_l9qN3k-V-xhyZkEtM_IE"></div>
-          <input name="check_it" id="check_it" value="Check It!" type="submit">
+          <p><input name="check_it" id="check_it" value="Check It!" type="submit"></p>
     </form>
 	</center>
 
