@@ -6,7 +6,7 @@
 	<meta content="initial-scale=1" name="viewport"></meta>
 	<meta content="DreamPress is DreamHost's managed WordPress Offering. Having problems? Come check if it's working." name="description"></meta>
 
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 
 	<!-- Holy shit. So many icons. -->
 	<link href="assets/images/favicons/apple-touch-icon-57x57.png" sizes="57x57" rel="apple-touch-icon"></link>
@@ -33,7 +33,7 @@
 	    	
 	    	<p>To use this properly, fill in the URL of the site and click the "Check It!" button. Go over the detailed results. Many have links to additional information. Hint. Hint. Read and follow the information to debug.</p>
 	    	
-	    	<p>Last Updated: July 10, 2015</p>
+	    	<p>Last Updated: May 20, 2016</p>
 
 <?php
 
@@ -100,6 +100,7 @@ if (!$_POST) {
 		$varnish_url  = (string) $_POST['url'];
 	
 		// Set Varnish Host for reasons
+/*
 		$varnish_host = (string) preg_replace('#^https?://#', '', $varnish_url);
 	
 		if (preg_match("~^https://~i", $varnish_url)) {
@@ -107,6 +108,7 @@ if (!$_POST) {
 		} elseif (!preg_match("~^(?:f|ht)tp?://~i", $varnish_url)) {
 		    $varnish_url = "http://" . $varnish_url;
 		}
+*/
 	
 		// Is it a real URL?
 	
@@ -482,7 +484,7 @@ if (!$_POST) {
 	<center>
 	<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">
           <input name="url" id="url" value="<?php if (isset($varnish_host) ) echo 'http://'.$varnish_host; ?>" type="text">
-          <div class="g-recaptcha" data-sitekey="6LfsogkTAAAAAMuZHeO_l9qN3k-V-xhyZkEtM_IE"></div>
+          <!-- <div class="g-recaptcha" data-sitekey="6LfsogkTAAAAAMuZHeO_l9qN3k-V-xhyZkEtM_IE"></div> -->
           <p>&nbsp;</p>
           <input name="check_it" id="check_it" value="Check It!" type="submit">
     </form>
