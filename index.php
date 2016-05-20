@@ -51,7 +51,7 @@
 <div id="dreampress" class="main-content">
 	<section class="section-intro maxwidth-700">
 		<div class="section-wrap">
-			<h1>Is DreamPress Working?</h1>
+			<h1><a href="index.php">Is DreamPress Working?</a></h1>
 			<p class="section-intro__lead-in">Please don't give this URL to customers yet! It's a work in progress!</p>
 			<p>This site is a work in progress. Please contact Mika with issues.</p>
 			<p>To use this properly, fill in the URL of the site and click the "Check It!" button. Go over the detailed results. Many have links to additional information. Hint. Hint. Read and follow the information to debug.</p>
@@ -59,7 +59,7 @@
 		</div>
 	</section>
 
-	<section class="section-centered">
+	<section class="section-light maxwidth-700">
 
 <?php
 
@@ -112,7 +112,7 @@ if (!$_POST) {
 	// Let's do some basic CYA here to prevent people from being dicks.
 	session_start();
 	
-	if ( isset($_SESSION['last_submit']) && time()-$_SESSION['last_submit'] < 60 ) {
+	if ( isset($_SESSION['last_submit']) && time()-$_SESSION['last_submit'] < 6 ) {
 	    ?>
 	
 	<div class="section-wrap">
@@ -241,7 +241,7 @@ if (!$_POST) {
 				<?php
 			}
 			?>
-			<table id="headers">
+			<table class="table-standard wordpress-comparison">
 			<?php
 	
 			/*
@@ -497,7 +497,7 @@ if (!$_POST) {
 				?>
 				<p>Here are some more gory details about the site:</p>
 	
-				<table id="headers">
+				<table class="table-standard wordpress-comparison">
 					<tr><td width="200px" style="text-align:right;">The url we checked:</td><td><a href="http://<?php echo $varnish_host; ?>"><?php echo $varnish_host; ?></a></td></tr>
 					<tr><td width="200px">&nbsp;</td><td><?php echo $varnish_headers[0]; ?></td></tr>
 					<?php
@@ -522,7 +522,7 @@ if (!$_POST) {
 	<center>
 	<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">
           <input name="url" id="url" value="<?php if (isset($varnish_host) ) echo $varnish_host; ?>" type="text">
-          <div class="g-recaptcha" data-sitekey="6LfsogkTAAAAAMuZHeO_l9qN3k-V-xhyZkEtM_IE"></div>
+          <!--<div class="g-recaptcha" data-sitekey="6LfsogkTAAAAAMuZHeO_l9qN3k-V-xhyZkEtM_IE"></div>-->
           <p>&nbsp;</p>
           <input name="check_it" id="check_it" value="Check It!" type="submit" class="btn dreampress-tech-features-trigger">
     </form>

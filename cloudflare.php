@@ -6,6 +6,7 @@
 	<meta content="initial-scale=1" name="viewport"></meta>
 	<meta content="DreamPress is DreamHost's managed WordPress Offering. Having problems? Come check if it's working." name="description"></meta>
 
+	<link href='//fonts.googleapis.com/css?family=Ubuntu:400,300italic,500,700,300' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
 	<!-- Holy shit. So many icons. -->
@@ -21,56 +22,137 @@
 
     <title>What's the deal with CloudFlare?</title>
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="assets/site.css" type="text/css" media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" href="assets/style.css" type="text/css" media="screen" title="no title" charset="utf-8">
   </head>
-  <body>
-    <div id="container">
-		<div id="content">
-	    	<div id="title">What's the deal with CloudFlare?</div>
+  <body id="top" style="margin-bottom: 597px;">
+
+	<header id="page-header">
+	<div class="button-area">
+		<a href="https://panel.dreamhost.com" class="btn-login">LOGIN</a>
+		<a href="http://webmail.dreamhost.com" class="btn-login">WEBMAIL</a>
+	</div>
+	<a href="/" id="logo"><span>DreamHost</span></a>
+	<button class="activate-menu">Menu</button>
+	<nav class="header-nav">
+		<button class="deactivate-menu">&times;</button>
+		<ul>
+			<li><a href="https://dreamhost.com/hosting/">Hosting</a></li>
+			<li><a href="https://dreamhost.com/cloud/">Cloud</a></li>
+			<li><a href="https://dreamhost.com/wordpress">WordPress</a></li>
+			<li><a href="https://dreamhost.com/domains/">Domains</a></li>
+			<li><a href="https://dreamhost.com/support/">Contact</a></li>
+		</ul>
+	</nav>
+
+</header>
+
+<div id="dreampress" class="main-content">
+	<section class="section-intro maxwidth-700">
+		<div class="section-wrap">
+			<h1><a href="index.php">Is DreamPress Working?</a></h1>
+			<p class="section-intro__lead-in">Please don't give this URL to customers yet! It's a work in progress!</p>
+			<p>This site is a work in progress. Please contact Mika with issues.</p>
+			<span class="btn-signup">Last Updated: May 20, 2016</span>
+		</div>
+	</section>
+
+<section class="section-light">
+		<div class="section-wrap">
+			<h2 class="spacing">What's the deal with CloudFlare?</h2>
+
+				<p>First up, CloudFlare and DreamPress work just fine together. If you're using the DreamHost Panel to activate CloudFlare, we even take care of all the hard work for you (except for one thing...). You need to make sure that you've set WordPress to use the www-prefix in your domain.</p>
+	    			<h3>Make WordPress use WWW</h3>
 	    	
-	    	<p>First up, CloudFlare and DreamPress work just fine together. If you're using the DreamHost Panel to activate CloudFlare, we even take care of all the hard work for you (except for one thing...). You need to make sure that you've set WordPress to use the www-prefix in your domain.</p>
+			    	<ol>
+				    	<li>Go to WP Admin -> Settings -> General</li>
+				    <li>Change both the home and site URLs to http://www.example.com/</li>
+				    <li>Do a search/replace of all your post content to change everything to use www</li>
+			    	</ol>
+			    	
+				<p>That last one may be hard. If you use SSH, we make it easy on DreamPress. Just log in and type this:</p>
+			    	<pre>wp search-replace http://example.com http://www.example.com --dry-run</pre>
 	    	
-	    	<h2>Make WordPress use WWW</h2>
+			    	<p>Check the output. If everything looks okay run it again without <code>--dry-run</code> at the end.</p>
+			    	<p>If you need a plugin, we suggest <a href="https://wordpress.org/plugins/better-search-replace/">Better Search Replace</a>.</p>
+				<p>Then check to make sure that the Varnish IP is set properly. If you've chosen to use our panel to configure CloudFlare then this will be handled automatically:</p>
+				<pre>wp option get vhp_varnish_ip</pre>
 	    	
-	    	<p>1. Go to WP Admin -> Settings -> General
-		    <br />2. Change both the home and site URLs to http://www.example.com/
-		    <br />3. Do a search/replace of all your post content to change everything to use www</p>
+				<h3>If you're NOT using Panel...</h3>
 	    	
-	    	<p>That last one may be hard. If you use SSH, we make it easy on DreamPress. Just log in and type this:</p>
-	    	<pre>
-		    	wp search-replace http://example.com http://www.example.com --dry-run
-	    	</pre>
+				<p>If you're not using our panel, there's one extra step you need to do. Go into Panel and get your DNS information. You need the IP address for your domain.</p>
+				<p>Edit your wp-config.php file and add this:</p>
 	    	
-	    	<p>Check the output. If everything looks okay run it again without <code>--dry-run</code> at the end.</p>
-	    	<p>If you need a plugin, we suggest <a href="https://wordpress.org/plugins/better-search-replace/">Better Search Replace</a>.</p>
+				<pre>define('VHP_VARNISH_IP','123.45.67.89');</pre>
 	    	
-	    	<p>Then check to make sure that the Varnish IP is set properly. If you've chosen to use our panel to configure CloudFlare then this will be handled automatically:</p>
-		    	
-		    <pre>
-			    wp option get vhp_varnish_ip
-		    </pre>
-	    	
-	    	<h2>If you're NOT using Panel...</h2>
-	    	
-	    	<p>If you're not using our panel, there's one extra step you need to do. Go into Panel and get your DNS information. You need the IP address for your domain.</p>
-	    	
-	    	<p>Edit your wp-config.php file and add this:</p>
-	    	
-	    	<pre>
-		    	define('VHP_VARNISH_IP','123.45.67.89');
-	    	</pre>
-	    	
-	    	<p>Replace "123.45.67.89" with the IP of your Varnish Server (not CloudFlare, Varnish). DO NOT put in http in this define statement. </p>
-		    	
-		    
-		    <p>For more information, read <a href="http://wiki.dreamhost.com/DreamPress#Can_I_use_CloudFlare_and_Varnish_together.3F">Using CloudFlare and Varnish</a></p>
-	    	
-	    	
-      </div><!-- end content -->
-      <div id="footer">
-        <div>Brought to you by:</div>
-        <div><a href="https://www.dreamhost.com" target="_new" ><img src="assets/images/logo.dreamhost.svg" width="200px" alt="DreamHost" title="DreamHost" /></a><div>
-      </div><!-- end footer -->
-    </div><!-- end container -->
-  </body>
+				<p>Replace "123.45.67.89" with the IP of your Varnish Server (not CloudFlare, Varnish). DO NOT put in http in this define statement. </p>
+				<p>For more information, read <a href="http://wiki.dreamhost.com/DreamPress#Can_I_use_CloudFlare_and_Varnish_together.3F">Using CloudFlare and Varnish</a></p>
+		</div>
+<p>&nbsp;</p>
+
+</section>
+
+</div>
+
+<footer id="page-footer">
+	<div class="top-bar">
+		<h2>Proudly hosting over <span>1,500,000</span> dreams since 1997.</h2>
+	</div>
+
+	<div class="section-wrap">
+		<ul class="get-started">
+			<li><h3><a href="https://dreamhost.com/hosting/shared/">Get Started</a></h3></li>
+			<li><a href="https://dreamhost.com/hosting/shared/" class="sign-up">Sign up</a></li>
+			<li><a href="https://panel.dreamhost.com">Log in</a></li>
+		</ul>
+		<ul class="products">
+			<li><h3><a href="https://dreamhost.com/hosting/">Services</a></h3></li>
+			<li></li>
+			<li><a href="https://dreamhost.com/domains/">Domains</a></li>
+			<li><a href="https://dreamhost.com/hosting/wordpress/">WordPress Hosting</a></li>
+			<li><a href="https://dreamhost.com/hosting/shared/">Web Hosting</a></li>
+			<li><a href="https://dreamhost.com/cloud/storage/">Cloud Storage</a></li>
+			<li><a href="https://dreamhost.com/hosting/vps/">VPS Hosting</a></li>
+			<li><a href="https://dreamhost.com/cloud/computing/">Cloud Computing</a></li>
+			<li><a href="https://dreamhost.com/hosting/dedicated/">Dedicated Servers</a></li>
+			<li><a href="https://dreamhost.com/cloud/cdn/">CDN</a></li>
+		</ul>
+		<ul class="company">
+			<li><h3><a href="https://dreamhost.com/company/">Company</a></h3></li>
+			<li></li>
+			<li><a href="https://dreamhost.com/company/">About</a></li>
+			<li><a href="https://dreamhost.com/affiliates/">Affiliates</a></li>
+			<li><a href="//www.dreamhost.com/blog">Blog</a></li>
+			<li><a href="https://dreamhost.com/partners/">Partners</a></li>
+			<li><a href="https://dreamhost.com/careers/">Careers</a></li>
+			<li><a href="https://dreamhost.com/company/were-green/">Green Hosting</a></li>
+			<li><a href="https://dreamhost.com/press/">Press &amp; News</a></li>
+			<li><a href="https://dreamhost.com/legal/">Legal</a></li>
+		</ul>
+		<ul class="support">
+			<li><h3><a href="https://dreamhost.com/support/">Support</a></h3></li>
+			<li><a href="https://dreamhost.com/support/">Contact</a></li>
+			<li><a href="http://wiki.dreamhost.com">Wiki</a></li>
+			<li><a href="//discussion.dreamhost.com">Forums</a></li>
+			<li><a href="https://dreamhost.com/legal/abuse/">Report Abuse</a></li>
+		</ul>
+		<div class="boring-stuff">
+			<a href="https://dreamhost.com/legal/terms-of-service/">Terms of Service</a><a href="https://dreamhost.com/legal/privacy-policy/">Privacy Policy</a><a href="http://whoisweb.dreamhost.com/">Whois</a>
+		</div>
+	</div>
+
+	<ul class="social">
+		<li><a href="//twitter.com/dreamhost"><span>Twitter</span><i aria-hidden="true">l</i></a></li>
+		<li><a href="//facebook.com/dreamhost"><span>Facebook</span><i aria-hidden="true">f</i></a></li>
+		<li><a href="//instagram.com/dreamhost"><span>Instagram</span><i aria-hidden="true">i</i></a></li>
+		<li><a href="//youtube.com/user/dreamhostusa"><span>YouTube</span><i aria-hidden="true">x</i></a></li>
+	</ul>
+
+	<div class="made-in-la">
+		Dreamed up with <span class="love"></span> in Los Angeles.
+	</div>
+
+</footer>
+
+</body>
 </html>
