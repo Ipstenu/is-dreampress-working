@@ -112,7 +112,7 @@ if (!$_POST) {
 	// Let's do some basic CYA here to prevent people from being dicks.
 	session_start();
 	
-	if ( isset($_SESSION['last_submit']) && time()-$_SESSION['last_submit'] < 6 ) {
+	if ( isset($_SESSION['last_submit']) && time()-$_SESSION['last_submit'] < 60 ) {
 	    ?>
 	
 	<div class="section-wrap">
@@ -522,7 +522,7 @@ if (!$_POST) {
 	<center>
 	<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">
           <input name="url" id="url" value="<?php if (isset($varnish_host) ) echo $varnish_host; ?>" type="text">
-          <!--<div class="g-recaptcha" data-sitekey="6LfsogkTAAAAAMuZHeO_l9qN3k-V-xhyZkEtM_IE"></div>-->
+          <div class="g-recaptcha" data-sitekey="6LfsogkTAAAAAMuZHeO_l9qN3k-V-xhyZkEtM_IE"></div>
           <p>&nbsp;</p>
           <input name="check_it" id="check_it" value="Check It!" type="submit" class="btn dreampress-tech-features-trigger">
     </form>
