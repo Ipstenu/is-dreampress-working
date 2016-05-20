@@ -6,6 +6,7 @@
 	<meta content="initial-scale=1" name="viewport"></meta>
 	<meta content="DreamPress is DreamHost's managed WordPress Offering. Having problems? Come check if it's working." name="description"></meta>
 
+	<link href='//fonts.googleapis.com/css?family=Ubuntu:400,300italic,500,700,300' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 
 	<!-- Holy shit. So many icons. -->
@@ -21,19 +22,44 @@
 
     <title>Is DreamPress working? Find out for sure!</title>
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="assets/site.css" type="text/css" media="screen" title="no title" charset="utf-8">
     <link rel="stylesheet" href="assets/style.css" type="text/css" media="screen" title="no title" charset="utf-8">
     <script src='https://www.google.com/recaptcha/api.js'></script>
   </head>
-  <body>
-    <div id="container">
-		<div id="content">
-	    	<div id="title">Is DreamPress Working?</div>
-	    	
-	    	<p><strong>Please don't give this URL to customers yet! It's a work in progress!</strong> Let Mika know if you think it needs fixings.</p>
-	    	
-	    	<p>To use this properly, fill in the URL of the site and click the "Check It!" button. Go over the detailed results. Many have links to additional information. Hint. Hint. Read and follow the information to debug.</p>
-	    	
-	    	<p>Last Updated: May 20, 2016</p>
+  <body id="top" style="margin-bottom: 597px;">
+
+	<header id="page-header">
+	<div class="button-area">
+		<a href="https://panel.dreamhost.com" class="btn-login">LOGIN</a>
+		<a href="http://webmail.dreamhost.com" class="btn-login">WEBMAIL</a>
+	</div>
+	<a href="/" id="logo"><span>DreamHost</span></a>
+	<button class="activate-menu">Menu</button>
+	<nav class="header-nav">
+		<button class="deactivate-menu">&times;</button>
+		<ul>
+			<li><a href="https://dreamhost.com/hosting/">Hosting</a></li>
+			<li><a href="https://dreamhost.com/cloud/">Cloud</a></li>
+			<li><a href="https://dreamhost.com/wordpress">WordPress</a></li>
+			<li><a href="https://dreamhost.com/domains/">Domains</a></li>
+			<li><a href="https://dreamhost.com/support/">Contact</a></li>
+		</ul>
+	</nav>
+
+</header>
+
+<div id="dreampress" class="main-content">
+	<section class="section-intro maxwidth-700">
+		<div class="section-wrap">
+			<h1>Is DreamPress Working?</h1>
+			<p class="section-intro__lead-in">Please don't give this URL to customers yet! It's a work in progress!</p>
+			<p>This site is a work in progress. Please contact Mika with issues.</p>
+			<p>To use this properly, fill in the URL of the site and click the "Check It!" button. Go over the detailed results. Many have links to additional information. Hint. Hint. Read and follow the information to debug.</p>
+			<span class="btn-signup">Last Updated: May 20, 2016</span>
+		</div>
+	</section>
+
+	<section class="section-centered">
 
 <?php
 
@@ -57,20 +83,26 @@ if (!$_POST) {
 	// If this is NOT a post, we should show the basic welcome.
 	?>
 
-	<p>So you have a site hosted on DreamPress and you're not sure if it's working right or caching fully? Let us help!</p>
-	
-	<div style="margin: 30px;font-weight: bold;font-size: 18pt;">Check a site!</div>
+	<div class="section-wrap">
+		<div class="section-cta">
+			<p>So you have a site hosted on <a href="https://www.dreamhost.com/hosting/wordpress/">DreamPress</a> and you're not sure if it's working right or caching fully? Let us help!</p>
+			<p>This site will actually check any site and give you results, so other hosts will also show up as working if they happen to use Varnish. But you should check out DreamPress. We're pretty cool.</p>
+		</div>
+	</div>
+
+	<center><h2>Check a site!<br /></h2></center>
 
 	<?php
 } elseif (!$_POST['url']) {
 	// This IS a post, but you forgot a URL. Can't scan nothing.
 	?>
 
-	<div id="subtitle">We can't tell!</div>
-
-	<p>Did you forget to put in a URL?</p>
-
-	<p>Try again!</p>
+	<div class="section-wrap">
+		<h3>We can't tell what site you're trying to check.</h3>
+		<p>Did you forget to put in a URL?</p>
+	</div>
+	
+	<center><h2>Try again<br /></h2></center>
 
 	<?php
 } else {
@@ -80,19 +112,20 @@ if (!$_POST) {
 	// Let's do some basic CYA here to prevent people from being dicks.
 	session_start();
 	
-	if (isset($_SESSION['last_submit']) && time()-$_SESSION['last_submit'] < 60) {
+	if ( isset($_SESSION['last_submit']) && time()-$_SESSION['last_submit'] < 60 ) {
 	    ?>
-	    
+	
+	<div class="section-wrap">
 	    <p><img src="assets/images/robot.sleeping.png" style="float:left;margin:0 5px 0 0;" width="150" /></p>
 	    
 	    <p>Hold on there, Nelly! You're checking too many sites too fast.</p>
 	    <p>We get it, though. You want to make sure you fix everything on your site and that it's working perfectly. Before you re-run a test, make sure you've changed everything, uploaded it, <em>and</em> flush Varnish on your server.</p>
 	    <p>You did all that? Cool!</p>
 		<p>Please wait at least 60 seconds and try again.</p>
+	</div>
 	    
 	    <?php
-	}
-	else {
+	} else {
 	    $_SESSION['last_submit'] = time();
 	
 		// Sanitize the URL
@@ -100,15 +133,15 @@ if (!$_POST) {
 		$varnish_url  = (string) $_POST['url'];
 	
 		// Set Varnish Host for reasons
-/*
 		$varnish_host = (string) preg_replace('#^https?://#', '', $varnish_url);
 	
 		if (preg_match("~^https://~i", $varnish_url)) {
-			$varnish_url = "https://" . $varnish_url;
+			$varnish_host = $varnish_url;
+			$varnish_url = $varnish_url;
 		} elseif (!preg_match("~^(?:f|ht)tp?://~i", $varnish_url)) {
-		    $varnish_url = "http://" . $varnish_url;
+		    $varnish_host = "http://" . $varnish_url;
+		    	$varnish_url = "http://" . $varnish_url;
 		}
-*/
 	
 		// Is it a real URL?
 	
@@ -176,11 +209,15 @@ if (!$_POST) {
 			while ( strpos( $varnish_headers[0] , '200') === false ) {
 				$varnish_headers = curl_response( curl_headers( $varnish_headers['Location'] ) );
 			}
-	
+		?>
+		
+		<div class="section-wrap">
+
+		<?php
 			if ( !isset($varnish_headers['X-Cacheable']) ) {
 	
 				?>
-				<div id="subtitle">Alas, no.</div>
+				<h3>Alas, no.</h3>
 				<p>Our robots were not find the "X-Varnish" header in the response from the server. That means Varnish is probably not running, which in turn means you actually may not be on DreamPress!</p>
 				<p>If you're sure you <em>are</em> on DreamPress, take the information below and send it in a support ticket to our awesome techs. That will help us debug things even faster!</p>
 	
@@ -189,15 +226,15 @@ if (!$_POST) {
 			} elseif ( strpos( $varnish_headers['X-Cacheable'], 'yes') !== false || strpos( $varnish_headers['X-Cacheable'], 'YES') !== false && isset($varnish_headers['Age']) && $varnish_headers['Age'] > 0 ) {
 				?>
 				<p><img src="assets/images/robot.presents.right.svg" style="float:left;margin:0 5px 0 0;" width="150" /></p>
-				<div id="subtitle">Yes!</div>
+				<h3>Yes!</h3>
 				<p>Well, congratulations to you!</p>
-				<p>Looks like DreamPress is running and so is our awesome Varnish cache.</p>
+				<p>Looks like your site is running with a Varnish cache.</p>
 				<p>Want to know more about the site? Check the results below:</p><br style="clear:both;" />
 				<?php
 	
 			} else {
 				?>
-				<div id="subtitle">Not Exactly</div>
+				<h3>Not Exactly</h3>
 	
 				<p>Varnish is running, but it can't serve up the cache properly. Why? Check out the red-bombs and yellow-warnings below.</p>
 	
@@ -216,31 +253,31 @@ if (!$_POST) {
 			// VARNISH
 			if ( isset( $varnish_headers['X-Cacheable'] ) && strpos( $varnish_headers['X-Cacheable'] ,'YES') !== false ) {
 				?><tr>
-					<td width="10px"><?php echo $icon_good; ?></td>
+					<td width="40px"><?php echo $icon_good; ?></td>
 					<td>Varnish is running properly so caching is happening.</td>
 				</tr><?php
 			} elseif (isset( $varnish_headers['X-Cacheable'] ) && strpos( $varnish_headers['X-Cacheable'] ,'NO') !== false ) {
 				?><tr>
-					<td width="10px"><?php echo $icon_bad; ?></td>
+					<td width="40px"><?php echo $icon_bad; ?></td>
 					<td>Varnish is running but can't cache.</td>
 				</tr><?php
 			} else {
 				?><tr>
-					<td width="10px"><?php echo $icon_warning; ?></td>
+					<td width="40px"><?php echo $icon_warning; ?></td>
 					<td>We can't find Varnish on this server.</td>
 				</tr><?php
 			}
 	
 			// WORDPRESS
 			$tags = get_meta_tags($varnish_url);
-			if ( isset($tags['generator']) && strpos( $tags['generator'] ,'WordPress') !== false ) {
+			if ( ( isset($tags['generator']) && strpos( $tags['generator'] ,'WordPress') !== false ) || strpos( $varnish_headers['Link'] ,'wp-json') !== false ) {
 				?><tr>
-					<td width="10px"><?php echo $icon_awesome; ?></td>
+					<td width="40px"><?php echo $icon_awesome; ?></td>
 					<td>This is a WordPress site!</td>
 				</tr><?php
 			} else {
 				?><tr>
-					<td width="10px"><?php echo $icon_warning; ?></td>
+					<td width="40px"><?php echo $icon_warning; ?></td>
 					<td>We're not sure if this is a WordPress site. Did you strip the meta tags?</td>
 				</tr><?php
 			}
@@ -471,8 +508,9 @@ if (!$_POST) {
 					}
 					?>
 				</table>
-	
-				<center><div style="margin: 30px;font-weight: bold;font-size: 18pt;">Check another site!</div></center>
+		</div>
+		
+		<center><h2>Check another site!</h2></center>
 	
 		    <?php
 			}
@@ -483,18 +521,78 @@ if (!$_POST) {
 
 	<center>
 	<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">
-          <input name="url" id="url" value="<?php if (isset($varnish_host) ) echo 'http://'.$varnish_host; ?>" type="text">
-          <!-- <div class="g-recaptcha" data-sitekey="6LfsogkTAAAAAMuZHeO_l9qN3k-V-xhyZkEtM_IE"></div> -->
+          <input name="url" id="url" value="<?php if (isset($varnish_host) ) echo $varnish_host; ?>" type="text">
+          <div class="g-recaptcha" data-sitekey="6LfsogkTAAAAAMuZHeO_l9qN3k-V-xhyZkEtM_IE"></div>
           <p>&nbsp;</p>
-          <input name="check_it" id="check_it" value="Check It!" type="submit">
+          <input name="check_it" id="check_it" value="Check It!" type="submit" class="btn dreampress-tech-features-trigger">
     </form>
 	</center>
+	
+	<p>&nbsp;</p>
+	
+</section>
 
-      </div><!-- end content -->
-      <div id="footer">
-        <div>Brought to you by:</div>
-        <div><a href="https://www.dreamhost.com" target="_new" ><img src="assets/images/logo.dreamhost.svg" width="200px" alt="DreamHost" title="DreamHost" /></a><div>
-      </div><!-- end footer -->
-    </div><!-- end container -->
-  </body>
+</div>
+
+<footer id="page-footer">
+	<div class="top-bar">
+		<h2>Proudly hosting over <span>1,500,000</span> dreams since 1997.</h2>
+	</div>
+
+	<div class="section-wrap">
+		<ul class="get-started">
+			<li><h3><a href="https://dreamhost.com/hosting/shared/">Get Started</a></h3></li>
+			<li><a href="https://dreamhost.com/hosting/shared/" class="sign-up">Sign up</a></li>
+			<li><a href="https://panel.dreamhost.com">Log in</a></li>
+		</ul>
+		<ul class="products">
+			<li><h3><a href="https://dreamhost.com/hosting/">Services</a></h3></li>
+			<li></li>
+			<li><a href="https://dreamhost.com/domains/">Domains</a></li>
+			<li><a href="https://dreamhost.com/hosting/wordpress/">WordPress Hosting</a></li>
+			<li><a href="https://dreamhost.com/hosting/shared/">Web Hosting</a></li>
+			<li><a href="https://dreamhost.com/cloud/storage/">Cloud Storage</a></li>
+			<li><a href="https://dreamhost.com/hosting/vps/">VPS Hosting</a></li>
+			<li><a href="https://dreamhost.com/cloud/computing/">Cloud Computing</a></li>
+			<li><a href="https://dreamhost.com/hosting/dedicated/">Dedicated Servers</a></li>
+			<li><a href="https://dreamhost.com/cloud/cdn/">CDN</a></li>
+		</ul>
+		<ul class="company">
+			<li><h3><a href="https://dreamhost.com/company/">Company</a></h3></li>
+			<li></li>
+			<li><a href="https://dreamhost.com/company/">About</a></li>
+			<li><a href="https://dreamhost.com/affiliates/">Affiliates</a></li>
+			<li><a href="//www.dreamhost.com/blog">Blog</a></li>
+			<li><a href="https://dreamhost.com/partners/">Partners</a></li>
+			<li><a href="https://dreamhost.com/careers/">Careers</a></li>
+			<li><a href="https://dreamhost.com/company/were-green/">Green Hosting</a></li>
+			<li><a href="https://dreamhost.com/press/">Press &amp; News</a></li>
+			<li><a href="https://dreamhost.com/legal/">Legal</a></li>
+		</ul>
+		<ul class="support">
+			<li><h3><a href="https://dreamhost.com/support/">Support</a></h3></li>
+			<li><a href="https://dreamhost.com/support/">Contact</a></li>
+			<li><a href="http://wiki.dreamhost.com">Wiki</a></li>
+			<li><a href="//discussion.dreamhost.com">Forums</a></li>
+			<li><a href="https://dreamhost.com/legal/abuse/">Report Abuse</a></li>
+		</ul>
+		<div class="boring-stuff">
+			<a href="https://dreamhost.com/legal/terms-of-service/">Terms of Service</a><a href="https://dreamhost.com/legal/privacy-policy/">Privacy Policy</a><a href="http://whoisweb.dreamhost.com/">Whois</a>
+		</div>
+	</div>
+
+	<ul class="social">
+		<li><a href="//twitter.com/dreamhost"><span>Twitter</span><i aria-hidden="true">l</i></a></li>
+		<li><a href="//facebook.com/dreamhost"><span>Facebook</span><i aria-hidden="true">f</i></a></li>
+		<li><a href="//instagram.com/dreamhost"><span>Instagram</span><i aria-hidden="true">i</i></a></li>
+		<li><a href="//youtube.com/user/dreamhostusa"><span>YouTube</span><i aria-hidden="true">x</i></a></li>
+	</ul>
+
+	<div class="made-in-la">
+		Dreamed up with <span class="love"></span> in Los Angeles.
+	</div>
+
+</footer>
+
+</body>
 </html>
