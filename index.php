@@ -6,7 +6,7 @@
 	<meta content="initial-scale=1" name="viewport"></meta>
 	<meta content="DreamPress is DreamHost's managed WordPress Offering. Having problems? Come check if it's working." name="description"></meta>
 
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 
 	<!-- Holy shit. So many icons. -->
 	<link href="assets/images/favicons/apple-touch-icon-57x57.png" sizes="57x57" rel="apple-touch-icon"></link>
@@ -113,17 +113,7 @@ if (!$_POST) {
 		// Call StrictURLValidator becuase FILTER_VALIDATE_URL thinks http://foo is okay, even when you tell it you want the damn host.
 		require_once 'StrictUrlValidator.php';
 	
-		// If we're SSL, bail early
-		if ( preg_match("~^https://~i", $varnish_url) ) {
-		?>
-			<div id="subtitle">Not for SSL</div>
-	
-			<p>Did you know Varnish can't cache SSL? This is <a href="https://www.varnish-cache.org/docs/trunk/phk/ssl.html">by design and is unlikely to change</a>.</p>
-	
-			<p>At this time, if you're using SSL, DreamPress will be running a little slower than it might. Sorry. We're working on that!</p>
-	
-		<?php
-		} elseif ( StrictUrlValidator::validate( $varnish_url, true, true ) === false ) {
+		if ( StrictUrlValidator::validate( $varnish_url, true, true ) === false ) {
 		?>
 	
 			<div id="subtitle">Egad!</div>
