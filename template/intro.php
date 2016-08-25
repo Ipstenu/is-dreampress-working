@@ -3,6 +3,6 @@
 		<div class="section-wrap">
 			<h1>Is DreamPress Working?</h1>
 			<p class="section__subhead">Fill in the URL of the site and click the "Check It!" button. Go over the detailed results. Many have links to additional information to help debug. <strong>BETA!!!</strong></p>
-			<p><span class="btn btn--large js-scroll-to">Updated: Aug 25, 2016</span></p>
+			<p><a href="index.php" class="btn btn--large js-scroll-to">Updated: Aug 25, 2016</a></p>
 		</div>
 	</section>
