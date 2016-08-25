@@ -4,246 +4,209 @@
 	session_start();
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
-  <head>
- 	<meta charset="utf-8"></meta>
-	<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"></meta>
-	<meta content="initial-scale=1" name="viewport"></meta>
-	<meta content="DreamPress is DreamHost's managed WordPress Offering. Having problems? Come check if it's working." name="description"></meta>
+<?php
+	include_once( "template/header.php" );
+	include_once( "template/intro.php" );
+?>
 
-	<link href='//fonts.googleapis.com/css?family=Ubuntu:400,300italic,500,700,300' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-
-	<!-- Holy shit. So many icons. -->
-	<link href="assets/images/favicons/apple-touch-icon-57x57.png" sizes="57x57" rel="apple-touch-icon"></link>
-	<link href="assets/images/favicons/apple-touch-icon-114x114.png" sizes="114x114" rel="apple-touch-icon"></link>
-	<link href="assets/images/favicons/apple-touch-icon-72x72.png" sizes="72x72" rel="apple-touch-icon"></link>
-	<link href="assets/images/favicons/apple-touch-icon-144x144.png" sizes="144x144" rel="apple-touch-icon"></link>
-	<link href="assets/images/favicons/apple-touch-icon-60x60.png" sizes="60x60" rel="apple-touch-icon"></link>
-	<link href="assets/images/favicons/apple-touch-icon-120x120.png" sizes="120x120" rel="apple-touch-icon"></link>
-	<link href="assets/images/favicons/apple-touch-icon-76x76.png" sizes="76x76" rel="apple-touch-icon"></link>
-	<link href="assets/images/favicons/apple-touch-icon-152x152.png" sizes="152x152" rel="apple-touch-icon"></link>
-	<link rel="icon" href="assets/images/favicons/favicon.ico">
-
-    <title>Is DreamPress working? Find out for sure!</title>
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="stylesheet" href="assets/site.css" type="text/css" media="screen" title="no title" charset="utf-8">
-    <link rel="stylesheet" href="assets/style.css" type="text/css" media="screen" title="no title" charset="utf-8">
-    <script src='https://www.google.com/recaptcha/api.js'></script>
-  </head>
-  <body id="top" style="margin-bottom: 597px;">
-
-	<header id="page-header">
-	<div class="button-area">
-		<a href="https://panel.dreamhost.com" class="btn-login">LOGIN</a>
-		<a href="http://webmail.dreamhost.com" class="btn-login">WEBMAIL</a>
-	</div>
-	<a href="/" id="logo"><span>DreamHost</span></a>
-	<button class="activate-menu">Menu</button>
-	<nav class="header-nav">
-		<button class="deactivate-menu">&times;</button>
-		<ul>
-			<li><a href="https://dreamhost.com/hosting/">Hosting</a></li>
-			<li><a href="https://dreamhost.com/cloud/">Cloud</a></li>
-			<li><a href="https://dreamhost.com/wordpress">WordPress</a></li>
-			<li><a href="https://dreamhost.com/domains/">Domains</a></li>
-			<li><a href="https://dreamhost.com/support/">Contact</a></li>
-		</ul>
-	</nav>
-
-</header>
-
-<div id="dreampress" class="main-content">
-	<section class="section-intro maxwidth-700">
+	<section id="managed-wordpress-hosting" class="section-centered dreampress-pros">
 		<div class="section-wrap">
-			<h1><a href="index.php">Is DreamPress Working?</a></h1>
-			<p class="section-intro__lead-in">Please don't give this URL to customers yet! It's a work in progress!</p>
-			<p>This site is a work in progress. Please contact Mika with issues.</p>
-			<p>To use this properly, fill in the URL of the site and click the "Check It!" button. Go over the detailed results. Many have links to additional information. Hint. Hint. Read and follow the information to debug.</p>
-			<span class="btn-signup">Last Updated: May 20, 2016</span>
+
+		<?php
+		// Define the filename so I can move this around.
+		$filename=$_SERVER["PHP_SELF"];
+		
+		// Icons
+		$icon_awesome	= '<i class="fa fa-heartbeat" style="color:#008000;"></i>';
+		$icon_good 		= '<i class="fa fa-beer" style="color:#008000;"></i>';
+		$icon_warning 	= '<i class="fa fa-exclamation-triangle" style="color:#FF9933"></i>';
+		$icon_awkward	= '<i class="fa fa-meh-o" style="color:#FF9933;"></i>';
+		$icon_bad		= '<i class="fa fa-bomb" style="color:#990000;"></i>';
+		
+		/*
+		 * The Form
+		 *
+		 * We're doing a very basic check. Is it a post?
+		 */
+		
+		if (!$_POST) {
+			// If this is NOT a post, we should show the basic welcome.
+			?>
+
+			<div class="clearfix spacing">
+				<h2 class="spacing">Running DreamPress?</h2>
+				<p>So you have a site hosted on <a href="https://www.dreamhost.com/hosting/wordpress/">DreamPress</a> and you're not sure if it's working right or caching fully? Let us help!</p>
+				<p>This site will actually check any site and give you results, so other hosts will also show up as working if they happen to use Varnish. But you should check out DreamPress. We're pretty cool.</p>
+			</div>
+			<div class="section-cta box">
+				<h2><strong>Check A Site!</strong></h2>
+				<?php include_once( "template/button.php" ); ?>
+			</div>
 		</div>
 	</section>
+			<?php
+		} elseif (!$_POST['url']) {
+			// This IS a post, but you forgot a URL. Can't scan nothing.
+			?>
 
-	<section class="section-light maxwidth-700">
-
-<?php
-// Define the filename so I can move this around.
-$filename=$_SERVER["PHP_SELF"];
-
-// Icons
-$icon_awesome	= '<i class="fa fa-heartbeat" style="color:#FF0099;"></i>';
-$icon_good 		= '<i class="fa fa-beer" style="color:#008000;"></i>';
-$icon_warning 	= '<i class="fa fa-exclamation-triangle" style="color:#FF9933"></i>';
-$icon_awkward	= '<i class="fa fa-meh-o" style="color:#FF0099;"></i>';
-$icon_bad		= '<i class="fa fa-bomb" style="color:#990000;"></i>';
-
-/*
- * The Form
- *
- * We're doing a very basic check. Is it a post?
- */
-
-if (!$_POST) {
-	// If this is NOT a post, we should show the basic welcome.
-	?>
-
-	<div class="section-wrap">
-		<div class="section-cta">
-			<p>So you have a site hosted on <a href="https://www.dreamhost.com/hosting/wordpress/">DreamPress</a> and you're not sure if it's working right or caching fully? Let us help!</p>
-			<p>This site will actually check any site and give you results, so other hosts will also show up as working if they happen to use Varnish. But you should check out DreamPress. We're pretty cool.</p>
+			<div class="clearfix spacing">
+				<h2 class="spacing">We can't tell what site you're trying to check.</h2>
+				<p>Did you forget to put in a URL?</p>
+			</div>
+			<div class="section-cta box">
+				<h2><strong>Try Again!</strong></h2>
+				<?php include_once( "template/button.php" ); ?>
+			</div>
 		</div>
-	</div>
-
-	<center><h2>Check a site!<br /></h2></center>
-
-	<?php
-} elseif (!$_POST['url']) {
-	// This IS a post, but you forgot a URL. Can't scan nothing.
-	?>
-
-	<div class="section-wrap">
-		<h3>We can't tell what site you're trying to check.</h3>
-		<p>Did you forget to put in a URL?</p>
-	</div>
-	
-	<center><h2>Try again<br /></h2></center>
-
-	<?php
-} else {
-
-	// We are a post, we're checking for a URL, let's do the magic!
-	
-	if ( isset($_SESSION['last_submit']) && time()-$_SESSION['last_submit'] < 60 ) {
-	    ?>
-	
-	<div class="section-wrap">
-	    <p><img src="assets/images/robot.sleeping.png" style="float:left;margin:0 5px 0 0;" width="150" /></p>
-	    
-	    <p>Hold on there, Nelly! You're checking too many sites too fast.</p>
-	    <p>We get it, though. You want to make sure you fix everything on your site and that it's working perfectly. Before you re-run a test, make sure you've changed everything, uploaded it, <em>and</em> flush Varnish on your server.</p>
-	    <p>You did all that? Cool!</p>
-		<p>Please wait at least 60 seconds and try again.</p>
-	</div>
-	    
-	    <?php
-	} else {
-	    $_SESSION['last_submit'] = time();
-	
-		// Sanitize the URL
-		$varnish_url  = (string) rtrim( filter_var($_POST['url'], FILTER_SANITIZE_URL), '/' );
-		$varnish_url  = (string) $_POST['url'];
-	
-		// Set Varnish Host for reasons
-		$varnish_host = (string) preg_replace('#^https?://#', '', $varnish_url);
-	
-		if (preg_match("~^https://~i", $varnish_url)) {
-			$varnish_host = $varnish_url;
-			$varnish_url = $varnish_url;
-		} elseif (!preg_match("~^(?:f|ht)tp?://~i", $varnish_url)) {
-		    $varnish_host = "http://" . $varnish_url;
-		    	$varnish_url = "http://" . $varnish_url;
-		}
-	
-		// Is it a real URL?
-	
-		// Call StrictURLValidator becuase FILTER_VALIDATE_URL thinks http://foo is okay, even when you tell it you want the damn host.
-		require_once 'StrictUrlValidator.php';
-	
-		if ( StrictUrlValidator::validate( $varnish_url, true, true ) === false ) {
-		?>
-	
-			<div id="subtitle">Egad!</div>
-	
-			<p><?php echo $varnish_url; ?> is not a valid URL.</p>
-	
-			<?php echo "<p>URL validation failed: " . StrictUrlValidator::getError() . "</p>"; ?>
-	
-			<p>Try again!</p>
-	
+	</section>
 		<?php
 		} else {
-			// Good, we're a real URL.
-	
-			// Since we reuse this, let's have a curl function
-			function curl_headers ( $url ) {
-				$curl = curl_init();
-				curl_setopt_array( $curl, array(
-					CURLOPT_FAILONERROR => true,
-					CURLOPT_CONNECTTIMEOUT => 30,
-					CURLOPT_TIMEOUT => 60,
-					CURLOPT_FOLLOWLOCATION => false,
-					CURLOPT_MAXREDIRS => 10,
-				    CURLOPT_HEADER => true,
-				    CURLOPT_NOBODY => true,
-				    CURLOPT_VERBOSE => true,
-				    CURLOPT_RETURNTRANSFER => true,
-				    CURLOPT_ENCODING => 'gzip, deflate',
-				    CURLOPT_URL => $url ) );
-				
-				return $curl;
-				curl_close($curl);
-			}
-			
-			// We also call the response a couple times
-			function curl_response ( $connection ) {
-				$varnish_result = curl_exec($connection);
-				$varnish_headerinfo = curl_getinfo($connection);
-				$varnish_headers = array();		
-				$varnish_responseheader = explode( "\n" , trim( mb_substr($varnish_result, 0, $varnish_headerinfo['header_size'] ) ) );
-	
-				// Reformatting 0 entry for playback
-				$varnish_headers[0] = $varnish_responseheader[0];
-				unset($varnish_responseheader[0]);
-	
-				foreach( $varnish_responseheader as $line ) {
-					list( $key, $val) = explode( ':' , $line , 2 );
-					$varnish_headers[$key] = trim($val);
-				}
-		
-				return $varnish_headers;		
-			}
-		
-			$CurlConnection = curl_headers( $varnish_url );	
-			$varnish_headers = curl_response( $CurlConnection );
-		
-			// If there's a 302 redirect then the get_headers 1 param breaks, so we'll compensate.
-			while ( strpos( $varnish_headers[0] , '200') === false ) {
-				$varnish_headers = curl_response( curl_headers( $varnish_headers['Location'] ) );
-			}
-		?>
-		
-		<div class="section-wrap">
 
-		<?php
-			if ( !isset($varnish_headers['X-Cacheable']) ) {
+			// We are a post, we're checking for a URL, let's do the magic!
 	
+			if ( isset($_SESSION['last_submit']) && time()-$_SESSION['last_submit'] < 60 ) {
+	    		?>
+
+			<div class="clearfix spacing">
+				<h2 class="spacing">Hold on there, Nelly!</h2>
+				<p>You're checking too many sites too fast.</p>
+				<p><img src="assets/images/robot.sleeping.png" style="float:left;margin:0 5px 0 0;" width="150" /></p>
+			    <p>We get it, though. You want to make sure you fix everything on your site and that it's working perfectly. Before you re-run a test, make sure you've changed everything, uploaded it, <em>and</em> flush Varnish on your server.</p>
+			    <p>You did all that? Cool!</p>
+				<p>Please wait at least 60 seconds and try again.</p>
+			</div>
+			<div class="section-cta box">
+				<h2><strong>Ready? Give it another go!</strong></h2>
+				<?php include_once( "template/button.php" ); ?>
+			</div>
+	    
+			<?php
+			} else {
+			    $_SESSION['last_submit'] = time();
+			
+				// Sanitize the URL
+				$varnish_url  = (string) rtrim( filter_var($_POST['url'], FILTER_SANITIZE_URL), '/' );
+				$varnish_url  = (string) $_POST['url'];
+			
+				// Set Varnish Host for reasons
+				$varnish_host = (string) preg_replace('#^https?://#', '', $varnish_url);
+			
+				if (preg_match("~^https://~i", $varnish_url)) {
+					$varnish_host = $varnish_url;
+					$varnish_url = $varnish_url;
+				} elseif (!preg_match("~^(?:f|ht)tp?://~i", $varnish_url)) {
+				    $varnish_host = "http://" . $varnish_url;
+				    	$varnish_url = "http://" . $varnish_url;
+				}
+			
+				// Is it a real URL?
+			
+				// Call StrictURLValidator becuase FILTER_VALIDATE_URL thinks http://foo is okay, even when you tell it you want the damn host.
+				require_once 'StrictUrlValidator.php';
+			
+				if ( StrictUrlValidator::validate( $varnish_url, true, true ) === false ) {
 				?>
-				<h3>Alas, no.</h3>
+
+			<div class="clearfix spacing">
+				<h2 class="spacing">Egad!</h2>
+				<p><?php echo $varnish_url; ?> is not a valid URL.</p>
+				<?php echo "<p>URL validation failed: " . StrictUrlValidator::getError() . "</p>"; ?>
+			</div>
+			<div class="section-cta box">
+				<h2><strong>Try a real URL</strong></h2>
+				<?php include_once( "template/button.php" ); ?>
+			</div>	
+				<?php
+				} else {
+					// Good, we're a real URL.
+			
+					// Since we reuse this, let's have a curl function
+					function curl_headers ( $url ) {
+						$curl = curl_init();
+						curl_setopt_array( $curl, array(
+							CURLOPT_FAILONERROR => true,
+							CURLOPT_CONNECTTIMEOUT => 30,
+							CURLOPT_TIMEOUT => 60,
+							CURLOPT_FOLLOWLOCATION => false,
+							CURLOPT_MAXREDIRS => 10,
+						    CURLOPT_HEADER => true,
+						    CURLOPT_NOBODY => true,
+						    CURLOPT_VERBOSE => true,
+						    CURLOPT_RETURNTRANSFER => true,
+						    CURLOPT_ENCODING => 'gzip, deflate',
+						    CURLOPT_URL => $url ) );
+						
+						return $curl;
+						curl_close($curl);
+					}
+					
+					// We also call the response a couple times
+					function curl_response ( $connection ) {
+						$varnish_result = curl_exec($connection);
+						$varnish_headerinfo = curl_getinfo($connection);
+						$varnish_headers = array();		
+						$varnish_responseheader = explode( "\n" , trim( mb_substr($varnish_result, 0, $varnish_headerinfo['header_size'] ) ) );
+			
+						// Reformatting 0 entry for playback
+						$varnish_headers[0] = $varnish_responseheader[0];
+						unset($varnish_responseheader[0]);
+			
+						foreach( $varnish_responseheader as $line ) {
+							list( $key, $val) = explode( ':' , $line , 2 );
+							$varnish_headers[$key] = trim($val);
+						}
+				
+						return $varnish_headers;		
+					}
+				
+					$CurlConnection = curl_headers( $varnish_url );	
+					$varnish_headers = curl_response( $CurlConnection );
+				
+					// If there's a 302 redirect then the get_headers 1 param breaks, so we'll compensate.
+					while ( strpos( $varnish_headers[0] , '200') === false ) {
+						$varnish_headers = curl_response( curl_headers( $varnish_headers['Location'] ) );
+					}
+
+					if ( !isset($varnish_headers['X-Cacheable']) ) {	 ?>
+			<div class="clearfix spacing">
+				<h2 class="spacing">Alas, no!</h2>
 				<p>Our robots were not find the "X-Varnish" header in the response from the server. That means Varnish is probably not running, which in turn means you actually may not be on DreamPress!</p>
 				<p>If you're sure you <em>are</em> on DreamPress, take the information below and send it in a support ticket to our awesome techs. That will help us debug things even faster!</p>
-	
+			</div>
+
 				<?php
 	
 			} elseif ( strpos( $varnish_headers['X-Cacheable'], 'yes') !== false || strpos( $varnish_headers['X-Cacheable'], 'YES') !== false && isset($varnish_headers['Age']) && $varnish_headers['Age'] > 0 ) {
 				?>
+			<div class="clearfix spacing">
+				<h2 class="spacing">Woot! YES!!</h2>
 				<p><img src="assets/images/robot.presents.right.svg" style="float:left;margin:0 5px 0 0;" width="150" /></p>
-				<h3>Yes!</h3>
 				<p>Well, congratulations to you!</p>
 				<p>Looks like your site is running with a Varnish cache.</p>
-				<p>Want to know more about the site? Check the results below:</p><br style="clear:both;" />
+				<p>Want to know more about the site? Check the results below.</p>
+			</div>
 				<?php
 	
 			} else {
 				?>
-				<h3>Not Exactly</h3>
-	
+			<div class="clearfix spacing">
+				<h2 class="spacing">Not Exactly...</h2>
 				<p>Varnish is running, but it can't serve up the cache properly. Why? Check out the red-bombs and yellow-warnings below.</p>
-	
+			</div>	
+			
 				<?php
-			}
+			} 
 			?>
+		</div>
+	</section>
+
+	<section class="section-centered maxwidth-700 section-dark">
+		<div class="section-wrap">
+			<h2>Scanner Results</h2>
+				<p>Our happy Robot Scanners found the following interesting information about your site.</p>
+
 			<table class="table-standard wordpress-comparison">
+	
 			<?php
 	
 			/*
@@ -272,7 +235,7 @@ if (!$_POST) {
 	
 			// WORDPRESS
 			$tags = get_meta_tags($varnish_url);
-			if ( ( isset($tags['generator']) && strpos( $tags['generator'] ,'WordPress') !== false ) || strpos( $varnish_headers['Link'] ,'wp-json') !== false ) {
+			if ( ( isset($tags['generator']) && strpos( $tags['generator'] ,'WordPress') !== false ) || strpos( $varnish_headers['Link'] , 'wp-json' ) !== false ) {
 				?><tr>
 					<td width="40px"><?php echo $icon_awesome; ?></td>
 					<td>This is a WordPress site!</td>
@@ -511,8 +474,16 @@ if (!$_POST) {
 					?>
 				</table>
 		</div>
-		
-		<center><h2>Check another site!</h2></center>
+	</section>
+
+	<section class="section-centered maxwidth-700">
+		<div class="section-wrap">
+			<div class="section-cta box">
+				<h2><strong>Check a different URL</strong></h2>
+				<?php include_once( "template/button.php" ); ?>
+			</div>
+		</div>
+	</section>
 	
 		    <?php
 			}
@@ -521,80 +492,5 @@ if (!$_POST) {
 }
 ?>
 
-	<center>
-	<form method="POST" action="<?php echo $filename; ?>" id="check_dreampress_form">
-          <input name="url" id="url" value="<?php if (isset($varnish_host) ) echo $varnish_host; ?>" type="text">
-          <div class="g-recaptcha" data-sitekey="6LfsogkTAAAAAMuZHeO_l9qN3k-V-xhyZkEtM_IE"></div>
-          <p>&nbsp;</p>
-          <input name="check_it" id="check_it" value="Check It!" type="submit" class="btn dreampress-tech-features-trigger">
-    </form>
-	</center>
-	
-	<p>&nbsp;</p>
-	
-</section>
-
-</div>
-
-<footer id="page-footer">
-	<div class="top-bar">
-		<h2>Proudly hosting over <span>1,500,000</span> dreams since 1997.</h2>
-	</div>
-
-	<div class="section-wrap">
-		<ul class="get-started">
-			<li><h3><a href="https://dreamhost.com/hosting/shared/">Get Started</a></h3></li>
-			<li><a href="https://dreamhost.com/hosting/shared/" class="sign-up">Sign up</a></li>
-			<li><a href="https://panel.dreamhost.com">Log in</a></li>
-		</ul>
-		<ul class="products">
-			<li><h3><a href="https://dreamhost.com/hosting/">Services</a></h3></li>
-			<li></li>
-			<li><a href="https://dreamhost.com/domains/">Domains</a></li>
-			<li><a href="https://dreamhost.com/hosting/wordpress/">WordPress Hosting</a></li>
-			<li><a href="https://dreamhost.com/hosting/shared/">Web Hosting</a></li>
-			<li><a href="https://dreamhost.com/cloud/storage/">Cloud Storage</a></li>
-			<li><a href="https://dreamhost.com/hosting/vps/">VPS Hosting</a></li>
-			<li><a href="https://dreamhost.com/cloud/computing/">Cloud Computing</a></li>
-			<li><a href="https://dreamhost.com/hosting/dedicated/">Dedicated Servers</a></li>
-			<li><a href="https://dreamhost.com/cloud/cdn/">CDN</a></li>
-		</ul>
-		<ul class="company">
-			<li><h3><a href="https://dreamhost.com/company/">Company</a></h3></li>
-			<li></li>
-			<li><a href="https://dreamhost.com/company/">About</a></li>
-			<li><a href="https://dreamhost.com/affiliates/">Affiliates</a></li>
-			<li><a href="//www.dreamhost.com/blog">Blog</a></li>
-			<li><a href="https://dreamhost.com/partners/">Partners</a></li>
-			<li><a href="https://dreamhost.com/careers/">Careers</a></li>
-			<li><a href="https://dreamhost.com/company/were-green/">Green Hosting</a></li>
-			<li><a href="https://dreamhost.com/press/">Press &amp; News</a></li>
-			<li><a href="https://dreamhost.com/legal/">Legal</a></li>
-		</ul>
-		<ul class="support">
-			<li><h3><a href="https://dreamhost.com/support/">Support</a></h3></li>
-			<li><a href="https://dreamhost.com/support/">Contact</a></li>
-			<li><a href="http://wiki.dreamhost.com">Wiki</a></li>
-			<li><a href="//discussion.dreamhost.com">Forums</a></li>
-			<li><a href="https://dreamhost.com/legal/abuse/">Report Abuse</a></li>
-		</ul>
-		<div class="boring-stuff">
-			<a href="https://dreamhost.com/legal/terms-of-service/">Terms of Service</a><a href="https://dreamhost.com/legal/privacy-policy/">Privacy Policy</a><a href="http://whoisweb.dreamhost.com/">Whois</a>
-		</div>
-	</div>
-
-	<ul class="social">
-		<li><a href="//twitter.com/dreamhost"><span>Twitter</span><i aria-hidden="true">l</i></a></li>
-		<li><a href="//facebook.com/dreamhost"><span>Facebook</span><i aria-hidden="true">f</i></a></li>
-		<li><a href="//instagram.com/dreamhost"><span>Instagram</span><i aria-hidden="true">i</i></a></li>
-		<li><a href="//youtube.com/user/dreamhostusa"><span>YouTube</span><i aria-hidden="true">x</i></a></li>
-	</ul>
-
-	<div class="made-in-la">
-		Dreamed up with <span class="love"></span> in Los Angeles.
-	</div>
-
-</footer>
-
-</body>
-</html>
+<?php
+	include_once( "template/footer.php" );
