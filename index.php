@@ -1,3 +1,9 @@
+<?php
+	// Sessions
+	@ob_start();
+	session_start();
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
   <head>
@@ -62,7 +68,6 @@
 	<section class="section-light maxwidth-700">
 
 <?php
-
 // Define the filename so I can move this around.
 $filename=$_SERVER["PHP_SELF"];
 
@@ -108,9 +113,6 @@ if (!$_POST) {
 } else {
 
 	// We are a post, we're checking for a URL, let's do the magic!
-
-	// Let's do some basic CYA here to prevent people from being dicks.
-	session_start();
 	
 	if ( isset($_SESSION['last_submit']) && time()-$_SESSION['last_submit'] < 60 ) {
 	    ?>
