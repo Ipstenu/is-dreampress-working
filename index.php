@@ -77,7 +77,6 @@
 				<div class="clearfix spacing">
 					<h2 class="spacing">Hold on there, Nelly!</h2>
 					<p>You're checking too many sites too fast.</p>
-					<p><img src="assets/images/robot.sleeping.png" style="float:left;margin:0 5px 0 0;" width="150" /></p>
 				    <p>We get it, though. You want to make sure you fix everything on your site and that it's working perfectly. Before you re-run a test, make sure you've changed everything, uploaded it, <em>and</em> flush Varnish on your server.</p>
 				    <p>You did all that? Cool!</p>
 					<p>Please wait at least 60 seconds and try again.</p>
@@ -182,7 +181,6 @@
 					} elseif ( strpos( $varnish_headers['X-Cacheable'], 'yes') !== false || strpos( $varnish_headers['X-Cacheable'], 'YES') !== false && isset($varnish_headers['Age']) && $varnish_headers['Age'] > 0 ) {
 						?>
 						<h2 class="spacing">Woot! YES!!</h2>
-						<p><img src="assets/images/robot.presents.right.svg" style="float:left;margin:0 5px 0 0;" width="250" /></p>
 						<p>Well, congratulations to you!</p>
 						<p>Looks like your site is running with a Varnish cache.</p>
 						<p>Want to know more about the site? Check the results below.</p>
@@ -293,8 +291,28 @@
 			if ( isset( $varnish_headers['X-Powered-By'] ) ) {
 				if ( strpos( $varnish_headers['X-Powered-By'] ,'HHVM') !== false ) {
 				?><tr>
-					<td><?php echo $icon_awesome; ?></td>
+					<td><?php echo $icon_good; ?></td>
 					<td>You are so awesome! You're on HHVM!</td>
+				</tr><?php
+				}
+			}
+			
+			// GZIP
+			if ( isset( $varnish_headers['Content-Encoding'] ) ) {
+				if ( strpos( $varnish_headers['Content-Encoding'] ,'Fastly') !== false ) {
+				?><tr>
+					<td><?php echo $icon_good; ?></td>
+					<td><a href="https://fastly.com">Fastly</a> fast can be! Your site is fast!</td>
+				</tr><?php
+				}
+			}
+			
+			// Fastly
+			if ( isset( $varnish_headers['Fastly-Debug-Digest'] ) || isset( $varnish_headers['Vary']) ) {
+				if ( strpos( $varnish_headers['Vary'] ,'gzip') !== false ) {
+				?><tr>
+					<td><?php echo $icon_good; ?></td>
+					<td>Gzippity zip zip! Your site is compressed and fast!</td>
 				</tr><?php
 				}
 			}
