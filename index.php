@@ -6,11 +6,21 @@
 
 <?php
 	include_once( "template/header.php" );
-	include_once( "template/intro.php" );
 ?>
+
+<div id="dreampress" class="main-content">
+	<section class="section-intro maxwidth-700">
+		<!-- Placeholder -->
+	</section>
 
 	<section id="managed-wordpress-hosting" class="section-centered dreampress-pros">
 		<div class="section-wrap">
+			
+			<div class="clearfix spacing">
+				<h1>Is DreamPress Working?</h1>
+				<p class="section__subhead">Fill in the URL of the site and click the "Check It!" button. Go over the detailed results. Many have links to additional information to help debug. <strong>BETA!!!</strong></p>
+				<p><a href="/" class="btn btn--large js-scroll-to">Updated: Aug 31, 2016</a></p>
+			</div>
 
 		<?php
 		// Define the filename so I can move this around.
@@ -35,15 +45,14 @@
 
 			<div class="clearfix spacing">
 				<h2 class="spacing">Running DreamPress?</h2>
-				<p>So you have a site hosted on <a href="https://www.dreamhost.com/hosting/wordpress/">DreamPress</a> and you're not sure if it's working right or caching fully? Let us help!</p>
+				<p class="section__subhead">So you have a site hosted on <a href="https://www.dreamhost.com/hosting/wordpress/">DreamPress</a> and you're not sure if it's working right or caching fully? Let us help!</p>
 				<p>This site will actually check any site and give you results, so other hosts will also show up as working if they happen to use Varnish. But you should check out DreamPress. We're pretty cool.</p>
 			</div>
 			<div class="section-cta box">
 				<h2><strong>Check A Site!</strong></h2>
 				<?php include_once( "template/button.php" ); ?>
 			</div>
-		</div>
-	</section>
+
 			<?php
 		} elseif (!$_POST['url']) {
 			// This IS a post, but you forgot a URL. Can't scan nothing.
@@ -57,30 +66,28 @@
 				<h2><strong>Try Again!</strong></h2>
 				<?php include_once( "template/button.php" ); ?>
 			</div>
-		</div>
-	</section>
 		<?php
 		} else {
 
 			// We are a post, we're checking for a URL, let's do the magic!
 	
 			if ( isset($_SESSION['last_submit']) && time()-$_SESSION['last_submit'] < 60 ) {
-	    		?>
-
-			<div class="clearfix spacing">
-				<h2 class="spacing">Hold on there, Nelly!</h2>
-				<p>You're checking too many sites too fast.</p>
-				<p><img src="assets/images/robot.sleeping.png" style="float:left;margin:0 5px 0 0;" width="150" /></p>
-			    <p>We get it, though. You want to make sure you fix everything on your site and that it's working perfectly. Before you re-run a test, make sure you've changed everything, uploaded it, <em>and</em> flush Varnish on your server.</p>
-			    <p>You did all that? Cool!</p>
-				<p>Please wait at least 60 seconds and try again.</p>
-			</div>
-			<div class="section-cta box">
-				<h2><strong>Ready? Give it another go!</strong></h2>
-				<?php include_once( "template/button.php" ); ?>
-			</div>
-	    
-			<?php
+		    		?>
+	
+				<div class="clearfix spacing">
+					<h2 class="spacing">Hold on there, Nelly!</h2>
+					<p>You're checking too many sites too fast.</p>
+					<p><img src="assets/images/robot.sleeping.png" style="float:left;margin:0 5px 0 0;" width="150" /></p>
+				    <p>We get it, though. You want to make sure you fix everything on your site and that it's working perfectly. Before you re-run a test, make sure you've changed everything, uploaded it, <em>and</em> flush Varnish on your server.</p>
+				    <p>You did all that? Cool!</p>
+					<p>Please wait at least 60 seconds and try again.</p>
+				</div>
+				<div class="section-cta box">
+					<h2><strong>Ready? Give it another go!</strong></h2>
+					<?php include_once( "template/button.php" ); ?>
+				</div>
+		    
+				<?php
 			} else {
 			    $_SESSION['last_submit'] = time();
 			
@@ -100,23 +107,22 @@
 				}
 			
 				// Is it a real URL?
-			
-				// Call StrictURLValidator becuase FILTER_VALIDATE_URL thinks http://foo is okay, even when you tell it you want the damn host.
+				// Call StrictURLValidator becuase FILTER_VALIDATE_URL thinks http://foo is okay
+				// even when you tell it you want the damn host.
 				require_once 'StrictUrlValidator.php';
 			
 				if ( StrictUrlValidator::validate( $varnish_url, true, true ) === false ) {
-				?>
-
-			<div class="clearfix spacing">
-				<h2 class="spacing">Egad!</h2>
-				<p><?php echo $varnish_url; ?> is not a valid URL.</p>
-				<?php echo "<p>URL validation failed: " . StrictUrlValidator::getError() . "</p>"; ?>
-			</div>
-			<div class="section-cta box">
-				<h2><strong>Try a real URL</strong></h2>
-				<?php include_once( "template/button.php" ); ?>
-			</div>	
-				<?php
+					?>
+					<div class="clearfix spacing">
+						<h2 class="spacing">Egad!</h2>
+						<p><?php echo $varnish_url; ?> is not a valid URL.</p>
+						<?php echo "<p>URL validation failed: " . StrictUrlValidator::getError() . "</p>"; ?>
+					</div>
+					<div class="section-cta box">
+						<h2><strong>Try a real URL</strong></h2>
+						<?php include_once( "template/button.php" ); ?>
+					</div>	
+					<?php
 				} else {
 					// Good, we're a real URL.
 			
@@ -167,45 +173,32 @@
 						$varnish_headers = curl_response( curl_headers( $varnish_headers['Location'] ) );
 					}
 
+					?><div class="clearfix spacing"><?php
 					if ( !isset($varnish_headers['X-Cacheable']) ) {	 ?>
-			<div class="clearfix spacing">
-				<h2 class="spacing">Alas, no!</h2>
-				<p>Our robots were not find the "X-Varnish" header in the response from the server. That means Varnish is probably not running, which in turn means you actually may not be on DreamPress!</p>
-				<p>If you're sure you <em>are</em> on DreamPress, take the information below and send it in a support ticket to our awesome techs. That will help us debug things even faster!</p>
-			</div>
-
-				<?php
-	
-			} elseif ( strpos( $varnish_headers['X-Cacheable'], 'yes') !== false || strpos( $varnish_headers['X-Cacheable'], 'YES') !== false && isset($varnish_headers['Age']) && $varnish_headers['Age'] > 0 ) {
+						<h2 class="spacing">Alas, no!</h2>
+						<p>Our robots were not find the "X-Varnish" header in the response from the server. That means Varnish is probably not running, which in turn means you actually may not be on DreamPress!</p>
+						<p>If you're sure you <em>are</em> on DreamPress, take the information below and send it in a support ticket to our awesome techs. That will help us debug things even faster!</p>
+						<?php
+					} elseif ( strpos( $varnish_headers['X-Cacheable'], 'yes') !== false || strpos( $varnish_headers['X-Cacheable'], 'YES') !== false && isset($varnish_headers['Age']) && $varnish_headers['Age'] > 0 ) {
+						?>
+						<h2 class="spacing">Woot! YES!!</h2>
+						<p><img src="assets/images/robot.presents.right.svg" style="float:left;margin:0 5px 0 0;" width="250" /></p>
+						<p>Well, congratulations to you!</p>
+						<p>Looks like your site is running with a Varnish cache.</p>
+						<p>Want to know more about the site? Check the results below.</p>
+						<?php
+					} else { 
+					?>
+						<h2 class="spacing">Not Exactly...</h2>
+						<p>Varnish is running, but it can't serve up the cache properly. Why? Check out the red-bombs and yellow-warnings below.</p>
+					<?php
+					} 
 				?>
-			<div class="clearfix spacing">
-				<h2 class="spacing">Woot! YES!!</h2>
-				<p><img src="assets/images/robot.presents.right.svg" style="float:left;margin:0 5px 0 0;" width="150" /></p>
-				<p>Well, congratulations to you!</p>
-				<p>Looks like your site is running with a Varnish cache.</p>
-				<p>Want to know more about the site? Check the results below.</p>
-			</div>
-				<?php
-	
-			} else {
-				?>
-			<div class="clearfix spacing">
-				<h2 class="spacing">Not Exactly...</h2>
-				<p>Varnish is running, but it can't serve up the cache properly. Why? Check out the red-bombs and yellow-warnings below.</p>
-			</div>	
-			
-				<?php
-			} 
-			?>
-		</div>
-	</section>
 
-	<section class="section-centered maxwidth-700 section-dark">
-		<div class="section-wrap">
-			<h2>Scanner Results</h2>
-				<p>Our happy Robot Scanners found the following interesting information about your site.</p>
+					<h2>Scanner Results</h2>
+					<p>Our happy Robot Scanners found the following interesting information about your site.</p>
 
-			<table class="table-standard wordpress-comparison">
+				<table class="table-standard wordpress-comparison">
 	
 			<?php
 	
@@ -269,7 +262,7 @@
 				if ( strpos( $varnish_headers['Server'] ,'cloudflare') !== false ) {
 				?><tr>
 					<td><?php echo $icon_warning; ?></td>
-					<td>Because CloudFlare is running, you <em>may</em> experience some cache oddities. <a href="cloudflare.php">Read More</a></td>
+					<td>Because CloudFlare is running, you <em>may</em> experience some cache oddities. Please read <a href="https://help.dreamhost.com/hc/en-us/articles/214581728-DreamPress-FAQs">Using CloudFlare and Varnish</a></td>
 				</tr><?php
 				}
 			}
@@ -324,12 +317,12 @@
 				} elseif ( strpos( $nsrecords ,'cloudflare') !== false ) {
 					?><tr>
 						<td><?php echo $icon_good; ?></td>
-						<td>You're using CloudFlare's DNS. Smart choice!<br /><?php echo $nsrecords; ?></td>
+						<td>You're using CloudFlare's DNS. That'll do.<br /><?php echo $nsrecords; ?></td>
 					</tr><?php
 				} elseif ( empty( $nsrecords ) ) {
 					?><tr>
 						<td><?php echo $icon_awkward; ?></td>
-						<td>We can't detect your name servers because the PHP check is imperfect. Just make sure you're using ours: ns1.dreamhost.com, ns2.dreamhost.com, ns3.dreamhost.com</td>
+						<td>We can't detect your name servers. Don't panic! The PHP check for nameservers is imperfect. Just make sure you're using ours:<br />ns1.dreamhost.com, ns2.dreamhost.com, ns3.dreamhost.com</td>
 					</tr><?php
 				} else {
 					?><tr>
@@ -395,7 +388,7 @@
 						<ul style=\"text-align: left;\">
 							<li>That url is excluded from the cache on purpose in the Varnish vcl file (in which case, yay! It's working.)</li>
 							<li>A theme or plugin is sending cache headers that are telling Varnish not to serve that content from cache. This means you'll have to fix the cache headers the application is sending to Varnish. A lot of the time those headers are Cache-Control and/or Expires.</li>
-							<li>A theme or plugin is setting a session cookie, which can prevent Varnish from serving content from cache. This means you'll have to update the application and make it not send a session cookie for anonymous traffic. (<a href="phpsessid.php">Need help debugging php sessions?</a>)</li>
+							<li>A theme or plugin is setting a session cookie, which can prevent Varnish from serving content from cache. This means you'll have to update the application and make it not send a session cookie for anonymous traffic. <!-- (<a href="https://help.dreamhost.com/hc/en-us/articles/URL_HERE">Need help debugging php sessions?</a>) --></li>
 							<li>Drunk robots.</li>
 						</ul>
 					</td>
@@ -407,7 +400,7 @@
 			if ( isset( $varnish_headers['Cache-Control'] ) && strpos( $varnish_headers['Cache-Control'] ,'no-cache') !== false ) {
 				?><tr>
 					<td><?php echo $icon_bad; ?></td>
-					<td>Something is setting the header Cache-Control to 'no-cache' which means visitors will never get cached pages. (<a href="no-cache.php">Need help debugging no-cache headers?</a>)</td>
+					<td>Something is setting the header Cache-Control to 'no-cache' which means visitors will never get cached pages. <!-- (<a href="https://help.dreamhost.com/hc/en-us/articles/URL_HERE">Need help debugging no-cache headers?</a>) --></td>
 				</tr><?php
 			}
 	
@@ -423,7 +416,7 @@
 			if ( isset( $varnish_headers['Pragma'] ) && strpos( $varnish_headers['Pragma'] ,'no-cache') !== false ) {
 				?><tr>
 					<td><?php echo $icon_bad; ?></td>
-					<td>Something is setting the header Pragma to 'no-cache' which means visitors will never get cached pages. (<a href="no-cache.php">Need help debugging no-cache headers?</a>)</td>
+					<td>Something is setting the header Pragma to 'no-cache' which means visitors will never get cached pages. <!-- (<a href="https://help.dreamhost.com/hc/en-us/articles/URL_HERE">Need help debugging no-cache headers?</a>) --></td>
 				</tr><?php
 			}
 			
@@ -447,7 +440,7 @@
 				} else {
 					?><tr>
 						<td><?php echo $icon_bad; ?></td>
-						<td>Mod Pagespeed is active but it looks like your caching headers may not be right. <a href="pagespeed.php">Don't know how to fix that? Read this!</a> (Note: This may be a false negative if other parts of your site are overwriting headers. Fix all other errors <em>first</em>, then come back to this.)</td>
+						<td>Mod Pagespeed is active but it looks like your caching headers may not be right. DreamPress doesn't support Pagespeed anymore, so this may be a false negative if other parts of your site are overwriting headers. Fix all other errors <em>first</em>, then come back to this. If you're still having errors, you'll need to look into using htaccess or nginx to override the Pagespeed headers.</td>
 					</tr><?php
 				}
 			}
@@ -460,7 +453,11 @@
 	
 			if ( StrictUrlValidator::validate( $varnish_url, true, true ) === true ) {
 				?>
-				<p>Here are some more gory details about the site:</p>
+				
+				
+				<h2>Technical Details</h2>
+				
+				<p>Here are some more gory details on the domain.</p>
 	
 				<table class="table-standard wordpress-comparison">
 					<tr><td width="200px" style="text-align:right;">The url we checked:</td><td><a href="http://<?php echo $varnish_host; ?>"><?php echo $varnish_host; ?></a></td></tr>
@@ -473,17 +470,12 @@
 					}
 					?>
 				</table>
-		</div>
-	</section>
+			</div>
 
-	<section class="section-centered maxwidth-700">
-		<div class="section-wrap">
 			<div class="section-cta box">
 				<h2><strong>Check a different URL</strong></h2>
 				<?php include_once( "template/button.php" ); ?>
 			</div>
-		</div>
-	</section>
 	
 		    <?php
 			}
@@ -491,6 +483,8 @@
 	}
 }
 ?>
+		</div>
+	</section>
 
 <?php
 	include_once( "template/footer.php" );
