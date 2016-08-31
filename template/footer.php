@@ -3,27 +3,27 @@
 		<li class="page-footer-nav__column">
 			<h5 class="page-footer-nav__headline">Web Hosting</h5>
 			<ul class="page-footer-nav__link-list list-unset">
-				<li><a href="/domains/">Domains</a></li>
-				<li><a href="/hosting/">Web Hosting</a></li>
-				<li><a href="/hosting/wordpress/">WordPress Hosting</a></li>
-				<li><a href="/company/were-green/">Green Hosting</a></li>
+				<li><a href="https://dreamhost.com/domains/">Domains</a></li>
+				<li><a href="https://dreamhost.com/hosting/">Web Hosting</a></li>
+				<li><a href="https://dreamhost.com/hosting/wordpress/">WordPress Hosting</a></li>
+				<li><a href="https://dreamhost.com/company/were-green/">Green Hosting</a></li>
 			</ul>
 		</li>
 		<li class="page-footer-nav__column">
 			<h5 class="page-footer-nav__headline">Infrastructure</h5>
 			<ul class="page-footer-nav__link-list list-unset">
-				<li><a href="/hosting/vps/">Virtual Private Servers</a></li>
-				<li><a href="/hosting/dedicated/">Dedicated Servers</a></li>
-				<li><a href="/cloud/computing/">Cloud Servers</a></li>
-				<li><a href="/cloud/storage/">Cloud Storage</a></li>
+				<li><a href="https://dreamhost.com/hosting/vps/">Virtual Private Servers</a></li>
+				<li><a href="https://dreamhost.com/hosting/dedicated/">Dedicated Servers</a></li>
+				<li><a href="https://dreamhost.com/cloud/computing/">Cloud Servers</a></li>
+				<li><a href="https://dreamhost.com/cloud/storage/">Cloud Storage</a></li>
 			</ul>
 		</li>
 		<li class="page-footer-nav__column">
 			<h5 class="page-footer-nav__headline">Extras</h5>
 			<ul class="page-footer-nav__link-list list-unset">
-				<li><a href="/cloud/cdn/">CDN</a></li>
-				<li><a href="/domains/private-registration/">Domain Privacy</a></li>
-				<li><a href="/hosting/vps/mysql/">MySQL Servers</a></li>
+				<li><a href="https://dreamhost.com/cloud/cdn/">CDN</a></li>
+				<li><a href="https://dreamhost.com/domains/private-registration/">Domain Privacy</a></li>
+				<li><a href="https://dreamhost.com/hosting/vps/mysql/">MySQL Servers</a></li>
 			</ul>
 		</li>
 		<li class="page-footer-nav__column">
@@ -37,12 +37,12 @@
 		<li class="page-footer-nav__column">
 			<h5 class="page-footer-nav__headline">Company</h5>
 			<ul class="page-footer-nav__link-list list-unset">
-				<li><a href="/company/">About</a></li>
-				<li><a href="/affiliates/">Affiliates</a></li>
-				<li><a href="/careers/">Careers</a></li>
-				<li><a href="/news/">News</a></li>
-				<li><a href="/partners/">Partners</a></li>
-				<li><a href="/press/">Press Releases</a></li>
+				<li><a href="https://dreamhost.com/company/">About</a></li>
+				<li><a href="https://dreamhost.com/affiliates/">Affiliates</a></li>
+				<li><a href="https://dreamhost.com/careers/">Careers</a></li>
+				<li><a href="https://dreamhost.com/news/">News</a></li>
+				<li><a href="https://dreamhost.com/partners/">Partners</a></li>
+				<li><a href="https://dreamhost.com/press/">Press Releases</a></li>
 			</ul>
 		</li>
 		<li class="page-footer-nav__column">
@@ -51,26 +51,26 @@
 				<li><a href="http://www.dreamhoststatus.com">Status Blog</a></li>
 				<li><a href="https://help.dreamhost.com">Knowledge Base</a></li>
 				<li><a href="https://discussion.dreamhost.com">Forum</a></li>
-				<li><a href="/support/">Contact</a></li>
+				<li><a href="https://dreamhost.com/support/">Contact</a></li>
 			</ul>
 		</li>
 		<li class="page-footer-nav__column">
 			<h5 class="page-footer-nav__headline">Legal</h5>
 			<ul class="page-footer-nav__link-list list-unset">
-				<li><a href="/legal/terms-of-service/">Terms of Service</a></li>
-				<li><a href="/legal/privacy-policy/">Privacy Policy</a></li>
-				<li><a href="/legal/abuse/">Report Abuse</a></li>
+				<li><a href="https://dreamhost.com/legal/terms-of-service/">Terms of Service</a></li>
+				<li><a href="https://dreamhost.com/legal/privacy-policy/">Privacy Policy</a></li>
+				<li><a href="https://dreamhost.com/legal/abuse/">Report Abuse</a></li>
 				<li><a href="http://whoisweb.dreamhost.com/">Whois</a></li>
 			</ul>
 		</li>
 		<li class="page-footer-nav__column">
 			<h5 class="page-footer-nav__headline">Social</h5>
 			<ul class="page-footer-nav__link-list list-unset">
-				<li><a href="/blog/">Blog</a></li>
-				<li><a href="//twitter.com/dreamhost">Twitter</a></li>
-				<li><a href="//facebook.com/dreamhost">Facebook</a></li>
-				<li><a href="//instagram.com/dreamhost">Instagram</a></li>
-				<li><a href="//youtube.com/user/dreamhostusa">Youtube</a></li>
+				<li><a href="https://dreamhost.com/blog/">Blog</a></li>
+				<li><a href="https://dreamhost.com//twitter.com/dreamhost">Twitter</a></li>
+				<li><a href="https://dreamhost.com//facebook.com/dreamhost">Facebook</a></li>
+				<li><a href="https://dreamhost.com//instagram.com/dreamhost">Instagram</a></li>
+				<li><a href="https://dreamhost.com//youtube.com/user/dreamhostusa">Youtube</a></li>
 			</ul>
 		</li>
 	</ul>
