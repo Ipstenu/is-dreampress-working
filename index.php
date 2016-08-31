@@ -44,9 +44,8 @@
 			?>
 
 			<div class="clearfix spacing">
-				<h2 class="spacing">Running DreamPress?</h2>
 				<p class="section__subhead">So you have a site hosted on <a href="https://www.dreamhost.com/hosting/wordpress/">DreamPress</a> and you're not sure if it's working right or caching fully? Let us help!</p>
-				<p>This site will actually check any site and give you results, so other hosts will also show up as working if they happen to use Varnish. But you should check out DreamPress. We're pretty cool.</p>
+				<p>This site will actually check any site and give you results, so other hosts will also show up as working if they happen to use Varnish. But you should check out <a href="https://www.dreamhost.com/hosting/wordpress/">DreamPress</a>. We're pretty cool.</p>
 			</div>
 			<div class="section-cta box">
 				<h2><strong>Check A Site!</strong></h2>
