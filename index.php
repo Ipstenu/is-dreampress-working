@@ -162,10 +162,11 @@
 				
 						return $varnish_headers;		
 					}
-				
+					
+					// Pull the lever, Kronk!
 					$CurlConnection = curl_headers( $varnish_url );	
 					$varnish_headers = curl_response( $CurlConnection );
-				
+									
 					// If there's a 302 redirect then the get_headers 1 param breaks, so we'll compensate.
 					while ( strpos( $varnish_headers[0] , '200') === false ) {
 						$varnish_headers = curl_response( curl_headers( $varnish_headers['Location'] ) );
@@ -471,6 +472,7 @@
 			if ( StrictUrlValidator::validate( $varnish_url, true, true ) === true ) {
 				?>
 				
+				<p>&nbsp;</p>
 				
 				<h2>Technical Details</h2>
 				
@@ -487,6 +489,86 @@
 					}
 					?>
 				</table>
+
+				<p>&nbsp;</p>
+				
+				<h2>GTMetrix Scan</h2>
+
+				<?php
+					// Load the web test framework class.
+					require_once("Services_WTF_Test.php");
+
+					$gtmetrix_test = new Services_WTF_Test("mika.epstein@dreamhost.com", "7c51c4254e7c73ba44b9888e56a9aa49");
+
+					$gtmetrix_testid = $gtmetrix_test->test(array(
+					    'url' => $varnish_url
+					));
+					
+					if ( !$gtmetrix_testid ) {
+					    echo "<p>Test ID failed: " . $gtmetrix_test->error() . "</p>";
+					} else {
+						$gtmetrix_test->get_results();
+					
+						if ($gtmetrix_test->error()) {
+							echo "<p>Test failed: " . $gtmetrix_test->error() ."</p>";
+						} else {		
+							$gtmetrix_results = $gtmetrix_test->results();
+							?>
+							
+							<table class="table-standard">
+								<tr>
+									<th>Page Load Time</th>
+									<th>Total Page Size</th>
+									<th>Requests</th>
+								</tr>
+								
+								<tr>
+									<td><?php echo round ( ( $gtmetrix_results['page_load_time'] / 1000 ), 2); ?>s</td>
+									<td><?php echo round ( ( $gtmetrix_results['page_bytes'] / 1048576 ), 2); ?>MB</td>
+									<td><?php echo $gtmetrix_results['page_elements']; ?></td>
+								</tr>
+							</table>
+							
+							<p>&nbsp;</p>
+
+							<?php
+							function get_letter_grade ( $numeric_grade ) {
+								$letter_grade = 'F';
+								$scale = array ( 100 => 'A', 89  => 'B', 79  => 'C', 69  => 'D', 60 => 'F', );
+								foreach ($scale as $cutoff => $grade) {
+									if ($numeric_grade >= $cutoff) {
+										$letter_grade = $grade;
+										break;
+									}
+								}
+							    return $letter_grade;
+							}	
+							?>
+							
+							<h3>Scores</h3>
+
+							<table class="table-standard">
+								<tr>
+									<th>Pagespeed</th>
+									<th>ySlow</th>
+								</tr>
+								
+								<tr>
+									<td><?php 
+										echo get_letter_grade ( $gtmetrix_results['pagespeed_score'] ); 
+										echo "(".$gtmetrix_results['pagespeed_score']."%)";
+									?></td>
+									<td><?php 
+										echo get_letter_grade ( $gtmetrix_results['yslow_score'] ); 
+										echo "(".$gtmetrix_results['yslow_score']."%)"; 
+									?></td>
+								</tr>
+							</table>	
+							<p><a href="<?php echo $gtmetrix_results['report_url']; ?>">Gtmetrix Results</a> (link valid for 30 days)</p>
+							<?php
+						}
+					}
+				?>
 			</div>
 
 			<div class="section-cta box">
