@@ -30,7 +30,7 @@
 			<div class="clearfix spacing">
 				<h1>Is DreamPress Working?</h1>
 				<p class="section__subhead">Fill in the URL of the site and click the "Check It!" button. Go over the detailed results. Many have links to additional information to help debug. <strong>BETA!!!</strong></p>
-				<p><a href="/" class="btn btn--large js-scroll-to">Updated: September 20, 2016</a></p>
+				<p><a href="/" class="btn btn--large js-scroll-to">Updated: October 17, 2017</a></p>
 			</div>
 
 		<?php
@@ -73,25 +73,25 @@
 		} else {
 
 			// We are a post, we're checking for a URL, let's do the magic!
-	
+
 			if ( isset($_SESSION['last_submit']) && time()-$_SESSION['last_submit'] < 60 ) {
-		    		?>
+				?>
 	
 				<div class="clearfix spacing">
 					<h2 class="spacing">Hold on there, Nelly!</h2>
 					<p>You're checking too many sites too fast.</p>
-				    <p>We get it, though. You want to make sure you fix everything on your site and that it's working perfectly. Before you re-run a test, make sure you've changed everything, uploaded it, <em>and</em> flush Varnish on your server.</p>
-				    <p>You did all that? Cool!</p>
+					<p>We get it, though. You want to make sure you fix everything on your site and that it's working perfectly. Before you re-run a test, make sure you've changed everything, uploaded it, <em>and</em> flush Varnish on your server.</p>
+					<p>You did all that? Cool!</p>
 					<p>Please wait at least 60 seconds and try again.</p>
 				</div>
 				<div class="section-cta box">
 					<h2><strong>Ready? Give it another go!</strong></h2>
 					<?php include_once( "template/button.php" ); ?>
 				</div>
-		    
+
 				<?php
 			} else {
-			    $_SESSION['last_submit'] = time();
+				$_SESSION['last_submit'] = time();
 			
 				// Sanitize the URL
 				$varnish_url  = (string) rtrim( filter_var($_POST['url'], FILTER_SANITIZE_URL), '/' );
@@ -102,12 +102,12 @@
 			
 				if (preg_match("~^https://~i", $varnish_url)) {
 					$varnish_host = $varnish_url;
-					$varnish_url = $varnish_url;
+					$varnish_url  = $varnish_url;
 				} elseif (!preg_match("~^(?:f|ht)tp?://~i", $varnish_url)) {
-				    $varnish_host = "http://" . $varnish_url;
-				    	$varnish_url = "http://" . $varnish_url;
+					$varnish_host = "http://" . $varnish_url;
+					$varnish_url  = "http://" . $varnish_url;
 				}
-		
+
 				// Is it a real URL?			
 				if ( StrictUrlValidator::validate( $varnish_url, true, true ) === false ) {
 					?>
@@ -124,9 +124,9 @@
 				} else {
 					// Good, we're a real URL.
 					// Pull the lever, Kronk!
-					$CurlConnection = curl_headers( $varnish_url );	
+					$CurlConnection  = curl_headers( $varnish_url );	
 					$varnish_headers = curl_response( $CurlConnection );
-									
+
 					// If there's a 302 redirect then the get_headers 1 param breaks, so we'll compensate.
 					while ( strpos( $varnish_headers[0] , '200') === false ) {
 						$varnish_headers = curl_response( curl_headers( $varnish_headers['Location'] ) );
@@ -157,12 +157,12 @@
 					<p>Our happy Robot Scanners found the following interesting information about your site.</p>
 					
 					<?php include_once( "code/robotscan.php" ); ?>
-	
+
 			<?php
 			// No matter what, we're going to show the headers etc. right? Wrong! If it wasn't a valid URL, we shouldn't
 			if ( StrictUrlValidator::validate( $varnish_url, true, true ) === true ) {
 				?>
-				
+
 				<p>&nbsp;</p>
 				
 				<h2>Technical Details</h2>
@@ -182,7 +182,7 @@
 				</table>
 
 				<p>&nbsp;</p>
-				
+
 				<h2>GTMetrix Scan</h2>
 
 				<?php include( 'code/gtmetrix.php' ); ?>
@@ -192,8 +192,7 @@
 				<h2><strong>Check a different URL</strong></h2>
 				<?php include_once( "template/button.php" ); ?>
 			</div>
-	
-		    <?php
+			<?php
 			}
 		}
 	}

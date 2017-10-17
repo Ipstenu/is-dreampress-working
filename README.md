@@ -5,8 +5,8 @@ This code is based on http://www.isvarnishworking.com/ - without ever seeing the
 
 Currently it works, but it has some room to grow
 
-Demo: http://isdreampressworking.elftest.net/
+Demo: http://isdreampressworking.breakwpdh.com/
 
-##To Do
+## To Do
 		
 * Suggestions welcome!

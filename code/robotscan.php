@@ -6,8 +6,8 @@
  *
  */
 
-if( !defined('ISDREAMPRESSWORKING') ) {
-   die('Direct access not permitted');
+if( !defined( 'ISDREAMPRESSWORKING' ) ) {
+	die('Direct access not permitted');
 }
 ?>
 
@@ -174,37 +174,43 @@ if( !defined('ISDREAMPRESSWORKING') ) {
 	
 	// SET COOKIE
 	if ( isset( $varnish_headers['Set-Cookie'] ) ) {
-	
-	if ( strpos( $varnish_headers['Set-Cookie'] , 'PHPSESSID') !== false ) {
-		?><tr>
-			<td><?php echo $icon_bad; ?></td>
-			<td>You're setting a PHPSESSID cookie. This makes Varnish not deliver cached pages. (<a href="phpsessid.php">Need help debugging php sessions?</a>)</td>
-		</tr><?php
-	}
-	if ( strpos( $varnish_headers['Set-Cookie'], 'edd_wp_session' ) !== false ) {
-		?><tr>
-			<td><?php echo $icon_bad; ?></td>
-			<td>We've spotted <a href="https://wordpress.org/plugins/easy-digital-downloads/">Easy Digital Downloads</a> being used with cookie sessions. This causes your cache to misbehave. Please set <code>define( 'EDD_USE_PHP_SESSIONS', true );</code> in your <code>wp-config.php</code> file.</td>
-		</tr><?php
-	}
-	if ( strpos( $varnish_headers['Set-Cookie'], 'edd_items_in_cart' ) !== false ) {
-		?><tr>
-			<td><?php echo $icon_warning; ?></td>
-			<td>Avast! We spy <a href="https://wordpress.org/plugins/easy-digital-downloads/">Easy Digital Downloads</a>. When customers add items to their cart, they'll no longer be using cached pages. Thought you ought to know.</td>
-		</tr><?php				
-	}
-	if ( strpos( $varnish_headers['Set-Cookie'], 'wfvt_' ) !== false ) {
-		?><tr>
-			<td><?php echo $icon_bad; ?></td>
-			<td>The plugin <a href="https://wordpress.org/plugins/wordfence">WordFence</a> is putting down cookies on every page load. Please disable that in your options (available from version 4.0.4 and up)</td>
-		</tr><?php
-	}
-	if ( strpos( $varnish_headers['Set-Cookie'], 'invite-anyone' ) !== false ) {
-		?><tr>
-			<td><?php echo $icon_bad; ?></td>
-			<td><a href="https://wordpress.org/plugins/invite-anyone/">Invite Anyone</a>, a plugin for BuddyPress, is putting down a cookie on every page load. This will prevent Varnish from caching :(</td>
-		</tr><?php
-	}
+		
+		if ( strpos( $varnish_headers['Set-Cookie'] , 'PHPSESSID') !== false ) {
+			?><tr>
+				<td><?php echo $icon_bad; ?></td>
+				<td>You're setting a PHPSESSID cookie. This tells Varnish that the person visiting your site is unique, and <em>not</em> to deliver a cached page. Sadly, diagnosising this is hard, as you have to look through the code in your plugins and themes for calls like <code>session_start</code> or <code>start_session</code>.</td>
+			</tr><?php
+		}
+		if ( strpos( $varnish_headers['Set-Cookie'], 'edd_wp_session' ) !== false ) {
+			?><tr>
+				<td><?php echo $icon_bad; ?></td>
+				<td>We've spotted <a href="https://wordpress.org/plugins/easy-digital-downloads/">Easy Digital Downloads</a> being used with cookie sessions. This causes your cache to misbehave. Please set <code>define( 'EDD_USE_PHP_SESSIONS', true );</code> in your <code>wp-config.php</code> file.</td>
+			</tr><?php
+		}
+		if ( strpos( $varnish_headers['Set-Cookie'], 'edd_items_in_cart' ) !== false ) {
+			?><tr>
+				<td><?php echo $icon_warning; ?></td>
+				<td>Avast! We spy <a href="https://wordpress.org/plugins/easy-digital-downloads/">Easy Digital Downloads</a>. When customers add items to their cart, they'll no longer be using cached pages. Thought you ought to know.</td>
+			</tr><?php				
+		}
+		if ( strpos( $varnish_headers['Set-Cookie'], 'wfvt_' ) !== false ) {
+			?><tr>
+				<td><?php echo $icon_bad; ?></td>
+				<td>The plugin <a href="https://wordpress.org/plugins/wordfence">WordFence</a> is putting down cookies on every page load. Please disable that in your options (available from version 4.0.4 and up).</td>
+			</tr><?php
+		}
+		if ( strpos( $varnish_headers['Set-Cookie'], 'invite-anyone' ) !== false ) {
+			?><tr>
+				<td><?php echo $icon_bad; ?></td>
+				<td><a href="https://wordpress.org/plugins/invite-anyone/">Invite Anyone</a>, a plugin for BuddyPress, is putting down a cookie on every page load. This will prevent Varnish from caching.</td>
+			</tr><?php
+		}
+		if ( strpos( $varnish_headers['Set-Cookie'], 'charitable_sessions' ) !== false ) {
+			?><tr>
+				<td><?php echo $icon_bad; ?></td>
+				<td><a href="https://wordpress.org/plugins/charitable/">Charitable</a>, a plugin for WordPress, is putting down a cookie on every page load. This will prevent Varnish from caching. <a href="https://github.com/Charitable/Charitable/issues/383">They're working on fixing this</a>.</td>
+			</tr><?php
+		}
 	}
 	
 	// AGE
@@ -214,19 +220,19 @@ if( !defined('ISDREAMPRESSWORKING') ) {
 		<td>There's no "Age" header, which means we can't tell if the page is actually serving from cache.</td>
 	</tr><?php
 	} elseif( $varnish_headers['Age'] <= 0 || $varnish_headers['Age'] == 0 ) {
-	if( !isset($varnish_headers['Cache-Control']) || strpos($varnish_headers['Cache-Control'], 'max-age') === FALSE ) {
-	?><tr>
-		<td><?php echo $icon_warning; ?></td>
-		<td>The "Age" header is set to less than 1, which means you checked right when Varnish cleared it's cache for that url, or for whatever reason Varnish is not actually serving the content for that url from cache. Check again (hit the recheck button below) but if it happens again, it could be one of the following reasons:
-			<ul style=\"text-align: left;\">
-				<li>That url is excluded from the cache on purpose in the Varnish vcl file (in which case, yay! It's working.)</li>
-				<li>A theme or plugin is sending cache headers that are telling Varnish not to serve that content from cache. This means you'll have to fix the cache headers the application is sending to Varnish. A lot of the time those headers are Cache-Control and/or Expires.</li>
-				<li>A theme or plugin is setting a session cookie, which can prevent Varnish from serving content from cache. This means you'll have to update the application and make it not send a session cookie for anonymous traffic. <!-- (<a href="https://help.dreamhost.com/hc/en-us/articles/URL_HERE">Need help debugging php sessions?</a>) --></li>
-				<li>Drunk robots.</li>
-			</ul>
-		</td>
-	</tr><?php			
-	}
+		if( !isset($varnish_headers['Cache-Control']) || strpos($varnish_headers['Cache-Control'], 'max-age') === FALSE ) {
+		?><tr>
+			<td><?php echo $icon_warning; ?></td>
+			<td>The "Age" header is set to less than 1, which means you checked right when Varnish cleared it's cache for that url, or for whatever reason Varnish is not actually serving the content for that url from cache. Check again (hit the recheck button below) but if it happens again, it could be one of the following reasons:
+				<ul style=\"text-align: left;\">
+					<li>That url is excluded from the cache on purpose in the Varnish vcl file (in which case, yay! It's working.)</li>
+					<li>A theme or plugin is sending cache headers that are telling Varnish not to serve that content from cache. This means you'll have to fix the cache headers the application is sending to Varnish. A lot of the time those headers are Cache-Control and/or Expires.</li>
+					<li>A theme or plugin is setting a session cookie, which can prevent Varnish from serving content from cache. This means you'll have to update the application and make it not send a session cookie for anonymous traffic.</li>
+					<li>Drunk robots.</li>
+				</ul>
+			</td>
+		</tr><?php
+		}
 	}
 	
 	// CACHE-CONTROL

@@ -27,12 +27,12 @@ function curl_headers ( $url ) {
 		CURLOPT_TIMEOUT => 60,
 		CURLOPT_FOLLOWLOCATION => false,
 		CURLOPT_MAXREDIRS => 10,
-	    CURLOPT_HEADER => true,
-	    CURLOPT_NOBODY => true,
-	    CURLOPT_VERBOSE => true,
-	    CURLOPT_RETURNTRANSFER => true,
-	    CURLOPT_ENCODING => 'gzip, deflate',
-	    CURLOPT_URL => $url ) );
+		CURLOPT_HEADER => true,
+		CURLOPT_NOBODY => true,
+		CURLOPT_VERBOSE => true,
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_ENCODING => 'gzip, deflate',
+		CURLOPT_URL => $url ) );
 	
 	return $curl;
 	curl_close($curl);
@@ -67,5 +67,5 @@ function get_letter_grade ( $numeric_grade ) {
 			break;
 		}
 	}
-    return $letter_grade;
+	return $letter_grade;
 }
