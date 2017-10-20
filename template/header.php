@@ -6,7 +6,7 @@
 	<meta content="initial-scale=1" name="viewport"></meta>
 	<meta content="DreamPress is DreamHost's managed WordPress Offering. Having problems? Come check if it's working." name="description"></meta>
 
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
 	<!-- Holy shit. So many icons. -->
 	<link href="assets/images/favicons/apple-touch-icon-57x57.png" sizes="57x57" rel="apple-touch-icon"></link>
@@ -19,12 +19,18 @@
 	<link href="assets/images/favicons/apple-touch-icon-152x152.png" sizes="152x152" rel="apple-touch-icon"></link>
 	<link rel="icon" href="assets/images/favicons/favicon.ico">
 
-    <title>Is DreamPress working? Find out for sure!</title>
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
-    <script async type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>
-    <link rel="stylesheet" href="assets/site.css" type="text/css" media="screen" title="no title" charset="utf-8">
-    
-    <script src='https://www.google.com/recaptcha/api.js'></script>
+	<title>Is DreamPress working? Find out for sure!</title>
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	<script async type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>
+	<link rel="stylesheet" href="assets/site.css" type="text/css" media="screen" title="no title" charset="utf-8">
+
+	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+	<script>
+		function onSubmit(token) {
+			document.getElementById("check_dreampress_form").submit();
+		}
+	</script>
+
 </head>
 
 <body id="top">
