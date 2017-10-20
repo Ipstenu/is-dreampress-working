@@ -23,4 +23,6 @@ tr:nth-child(odd) {
 input#url {
     width: 400px;
     margin: 20px;
+    float: left;
+    margin-left: 25px;
 }

@@ -28,9 +28,8 @@
 		<div class="section-wrap">
 			
 			<div class="clearfix spacing">
-				<h1>Is DreamPress Working?</h1>
-				<p class="section__subhead">Fill in the URL of the site and click the "Check It!" button. Go over the detailed results. Many have links to additional information to help debug. <strong>BETA!!!</strong></p>
-				<p><a href="/" class="btn btn--large js-scroll-to">Updated: October 17, 2017</a></p>
+				<h1>Is DreamPress Working? <strong>BETA!!!</strong></h1>
+				<p><a href="/" class="btn btn--large js-scroll-to">Updated: October 20, 2017</a></p>
 			</div>
 
 		<?php

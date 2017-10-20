@@ -23,6 +23,7 @@
 	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 	<script async type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>
 	<link rel="stylesheet" href="assets/site.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	<link rel="stylesheet" href="assets/style.css" type="text/css" media="screen" title="no title" charset="utf-8">
 
 	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 	<script>
@@ -37,48 +38,4 @@
 
 <header class="page-header page-header--overlay">
 	<a href="https://dreamhost.com/" id="logo" class="u-float-left"><span>DreamHost</span></a>
-
-	<button class="btn btn--outline js-toggle-mobile-menu btn--toggle-mobile-menu u-float-right">Menu
-		<svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
-		  <path d="M9.546.116c-.15-.155-.392-.155-.542 0L4.83 4.704.654.116C.505-.04.262-.04.112.116c-.15.15-.15.393 0 .544L4.46 5.44c.017.044.045.088.082.125.08.08.183.114.286.11.104.008.21-.03.29-.11.036-.037.064-.08.083-.126L9.547.66c.15-.15.15-.394 0-.544" fill="#fff" fill-rule="evenodd"/>
-		</svg>
-	</button>
-
-	<div class="mobile-nav">
-		<nav class="header-nav">
-			<ul>
-				<li><a href="https://dreamhost.com/domains/" class="header-nav__link">Domain Names</a></li>
-				<li class="list-dropdown__wrap">
-					<button class="header-nav__link js-toggle-dropdown">Web Hosting</button>
-					<ul class="list-dropdown list-dropdown--arrow-left">
-						<li><a class="list-dropdown__link" href="https://dreamhost.com/hosting/">Hosting Overview</a></li>
-						<li><a class="list-dropdown__link" href="https://dreamhost.com/hosting/shared/">Web Hosting</a></li>
-						<li><a class="list-dropdown__link" href="https://dreamhost.com/hosting/vps/">VPS Hosting</a></li>
-						<li><a class="list-dropdown__link" href="https://dreamhost.com/hosting/dedicated/">Dedicated Hosting</a></li>
-					</ul>
-				</li>
-				<li><a href="https://dreamhost.com/hosting/wordpress/" class="header-nav__link">WordPress Hosting</a></li>
-				<li class="list-dropdown__wrap">
-					<button class="header-nav__link js-toggle-dropdown">Cloud Services</button>
-					<ul class="list-dropdown list-dropdown--arrow-left">
-						<li><a class="list-dropdown__link" href="https://dreamhost.com/cloud/">Cloud Overview</a></li>
-						<li><a class="list-dropdown__link" href="https://dreamhost.com/cloud/computing/">Cloud Servers</a></li>
-						<li><a class="list-dropdown__link" href="https://dreamhost.com/cloud/storage/">Cloud Storage</a></li>
-					</ul>
-				</li>
-			</ul>
-		</nav>
-		<div class="button-area list-dropdown__wrap">
-			<button class="btn btn--small btn--outline js-toggle-dropdown">Sign in
-				<svg width="10" height="6" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
-				  <path d="M9.546.116c-.15-.155-.392-.155-.542 0L4.83 4.704.654.116C.505-.04.262-.04.112.116c-.15.15-.15.393 0 .544L4.46 5.44c.017.044.045.088.082.125.08.08.183.114.286.11.104.008.21-.03.29-.11.036-.037.064-.08.083-.126L9.547.66c.15-.15.15-.394 0-.544" fill="#fff" fill-rule="evenodd"/>
-				</svg>
-			</button>
-			<ul class="list-dropdown">
-				<li><a class="list-dropdown__link" href="https://panel.dreamhost.com">Web Hosting Control Panel</a></li>
-				<li><a class="list-dropdown__link" href="https://iad2.dreamcompute.com">DreamCompute Control Panel</a></li>
-				<li><a class="list-dropdown__link" href="http://webmail.dreamhost.com">Webmail</a></li>
-			</ul>
-		</div>
-	</div>
 </header>
