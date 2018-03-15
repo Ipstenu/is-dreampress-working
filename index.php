@@ -132,22 +132,26 @@
 					}
 
 					?><div class="clearfix spacing"><?php
-					if ( !isset( $varnish_headers['X-Cacheable'] ) || !isset( $varnish_headers['X-Varnish'] ) || !isset( $varnish_headers['X-Cache'] ) ) {
+					// Check if the headers are set AND if the values are valid
+					$cacheheaders_set = ( isset( $varnish_headers['X-Cacheable'] ) || isset( $varnish_headers['X-Varnish'] ) || isset( $varnish_headers['X-Cache'] ) || is_numeric( strpos( $varnish_headers['Via'], 'arnish' ) ) )? true : false;
+					$cacheheaders_val = ( strpos( $varnish_headers['X-Cacheable'], 'yes' ) !== false || strpos( $varnish_headers['X-Cacheable'], 'YES' ) !== false && isset( $varnish_headers[ 'Age' ] ) && $varnish_headers[ 'Age' ] > 0 )?  true : false;
+
+					if ( !$cacheheaders_set ) {
 						?>
 						<h2 class="spacing">Alas, no!</h2>
-						<p>Our robots were not find the "X-Varnish" header in the response from the server. That means Varnish is probably not running, which in turn means you actually may not be on DreamPress!</p>
+						<p>Our robots were not able to find the "X-Varnish" header in the response from the server. That means Varnish is probably not running, which in turn means you actually may not be on DreamPress!</p>
 						<p>If you're sure you <em>are</em> on DreamPress, take the information below and send it in a support ticket to our awesome techs. That will help us debug things even faster!</p>
 						<?php
-					} elseif ( strpos( $varnish_headers['X-Cacheable'], 'yes') !== false || strpos( $varnish_headers['X-Cacheable'], 'YES') !== false && isset($varnish_headers['Age']) && $varnish_headers['Age'] > 0 ) {
+					} elseif ( $cacheheaders_val ) {
 						?>
-						<h2 class="spacing">Woot! YES!!</h2>
+						<h2>Woot! YES!!</h2>
 						<p>Well, congratulations to you!</p>
 						<p>Looks like your site is running with a Varnish cache.</p>
 						<p>Want to know more about the site? Check the results below.</p>
 						<?php
 					} else { 
 					?>
-						<h2 class="spacing">Not Exactly...</h2>
+						<h2>Not Exactly...</h2>
 						<p>Varnish is running, but it can't serve up the cache properly. Why? Check out the red-bombs and yellow-warnings below.</p>
 					<?php
 					} 
@@ -170,12 +174,12 @@
 				<p>Here are some more gory details on the domain.</p>
 	
 				<table class="table-standard wordpress-comparison">
-					<tr><td width="200px" style="text-align:right;">The url we checked:</td><td><a href="http://<?php echo $varnish_host; ?>"><?php echo $varnish_host; ?></a></td></tr>
+					<tr><td width="200px" style="text-align:right;">The url we checked:</td><td><a href="<?php echo $varnish_host; ?>"><?php echo $varnish_host; ?></a></td></tr>
 					<tr><td width="200px">&nbsp;</td><td><?php echo $varnish_headers[0]; ?></td></tr>
 					<?php
-					foreach ($varnish_headers as $header => $key ) {
+					foreach ( $varnish_headers as $header => $key ) {
 						if ( $header != '0' ) {
-							echo '<tr><td style="text-align:right;">'.$header.':</td><td>'.htmlspecialchars($key).'</td></tr>';
+							echo '<tr><td style="text-align:right;">' . $header . ':</td><td>' . htmlspecialchars( $key ) . '</td></tr>';
 						}
 					}
 					?>

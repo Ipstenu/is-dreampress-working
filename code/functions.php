@@ -11,11 +11,11 @@ if( !defined('ISDREAMPRESSWORKING') ) {
 }
 
 // Icons
-$icon_awesome   = '<i class="far fa-heartbeat" style="color:#008000;"></i>';
-$icon_good      = '<i class="far fa-beer" style="color:#008000;"></i>';
+$icon_awesome   = '<i class="fas fa-heartbeat" style="color:#008000;"></i>';
+$icon_good      = '<i class="fas fa-beer" style="color:#008000;"></i>';
 $icon_warning   = '<i class="fas fa-exclamation-triangle" style="color:#FF9933"></i>';
-$icon_awkward   = '<i class="far fa-meh" style="color:#FF9933;"></i>';
-$icon_bad       = '<i class="far fa-bomb" style="color:#990000;"></i>';
+$icon_awkward   = '<i class="fas fa-meh" style="color:#FF9933;"></i>';
+$icon_bad       = '<i class="fas fa-bomb" style="color:#990000;"></i>';
 
 // This function gets the curl headers
 function curl_headers ( $url ) {
