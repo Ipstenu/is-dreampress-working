@@ -12,11 +12,11 @@
 	@ob_start();
 	session_start();
 
-	define('ISDREAMPRESSWORKING', TRUE);
+	define( 'ISDREAMPRESSWORKING', TRUE );
 
-	include_once( "template/header.php" );
-	include_once( "code/functions.php" );
-	include_once( "code/StrictUrlValidator.php" );
+	include_once( 'template/header.php' );
+	include_once( 'code/functions.php' );
+	include_once( 'code/StrictUrlValidator.php' );
 ?>
 
 <div id="dreampress" class="main-content">
@@ -29,20 +29,20 @@
 			
 			<div class="clearfix spacing">
 				<h1>Is DreamPress Working? <strong>BETA!!!</strong></h1>
-				<p><a href="/" class="btn btn--large js-scroll-to">Updated: October 20, 2017</a></p>
+				<p><a href="/" class="btn btn--large js-scroll-to">Updated: March 15, 2018</a></p>
 			</div>
 
 		<?php
 		// Define the filename so I can move this around.
-		$filename=$_SERVER["PHP_SELF"];
-				
+		$filename = $_SERVER["PHP_SELF"];
+
 		/*
 		 * The Form
 		 *
 		 * We're doing a very basic check. Is it a post?
 		 */
-		
-		if (!$_POST) {
+
+		if ( !$_POST ) {
 			// If this is NOT a post, we should show the basic welcome.
 			?>
 
@@ -52,7 +52,7 @@
 			</div>
 			<div class="section-cta box">
 				<h2><strong>Check A Site!</strong></h2>
-				<?php include_once( "template/button.php" ); ?>
+				<?php include_once( 'template/button.php' ); ?>
 			</div>
 
 			<?php
@@ -66,18 +66,18 @@
 			</div>
 			<div class="section-cta box">
 				<h2><strong>Try Again!</strong></h2>
-				<?php include_once( "template/button.php" ); ?>
+				<?php include_once( 'template/button.php' ); ?>
 			</div>
 		<?php
 		} else {
 
 			// We are a post, we're checking for a URL, let's do the magic!
 
-			if ( isset($_SESSION['last_submit']) && time()-$_SESSION['last_submit'] < 60 ) {
+			if ( isset($_SESSION['last_submit']) && time()-$_SESSION['last_submit'] < 30 ) {
 				?>
 	
 				<div class="clearfix spacing">
-					<h2 class="spacing">Hold on there, Nelly!</h2>
+					<h2 class="spacing">Hold on there!</h2>
 					<p>You're checking too many sites too fast.</p>
 					<p>We get it, though. You want to make sure you fix everything on your site and that it's working perfectly. Before you re-run a test, make sure you've changed everything, uploaded it, <em>and</em> flush Varnish on your server.</p>
 					<p>You did all that? Cool!</p>
@@ -85,7 +85,7 @@
 				</div>
 				<div class="section-cta box">
 					<h2><strong>Ready? Give it another go!</strong></h2>
-					<?php include_once( "template/button.php" ); ?>
+					<?php include_once( 'template/button.php' ); ?>
 				</div>
 
 				<?php
@@ -93,16 +93,16 @@
 				$_SESSION['last_submit'] = time();
 			
 				// Sanitize the URL
-				$varnish_url  = (string) rtrim( filter_var($_POST['url'], FILTER_SANITIZE_URL), '/' );
+				$varnish_url  = (string) rtrim( filter_var( $_POST['url'], FILTER_SANITIZE_URL), '/' );
 				$varnish_url  = (string) $_POST['url'];
 			
 				// Set Varnish Host for reasons
-				$varnish_host = (string) preg_replace('#^https?://#', '', $varnish_url);
+				$varnish_host = (string) preg_replace( '#^https?://#', '', $varnish_url );
 			
-				if (preg_match("~^https://~i", $varnish_url)) {
+				if ( preg_match("~^https://~i", $varnish_url ) ) {
 					$varnish_host = $varnish_url;
 					$varnish_url  = $varnish_url;
-				} elseif (!preg_match("~^(?:f|ht)tp?://~i", $varnish_url)) {
+				} elseif ( !preg_match( "~^(?:f|ht)tp?://~i", $varnish_url ) ) {
 					$varnish_host = "http://" . $varnish_url;
 					$varnish_url  = "http://" . $varnish_url;
 				}
@@ -113,11 +113,11 @@
 					<div class="clearfix spacing">
 						<h2 class="spacing">Egad!</h2>
 						<p><?php echo $varnish_url; ?> is not a valid URL.</p>
-						<?php echo "<p>URL validation failed: " . StrictUrlValidator::getError() . "</p>"; ?>
+						<p>URL validation failed: <strong><?php echo StrictUrlValidator::getError(); ?></strong></p>
 					</div>
 					<div class="section-cta box">
-						<h2><strong>Try a real URL</strong></h2>
-						<?php include_once( "template/button.php" ); ?>
+						<h2><strong>Double check your typing and try again.</strong></h2>
+						<?php include_once( 'template/button.php' ); ?>
 					</div>	
 					<?php
 				} else {
@@ -132,7 +132,8 @@
 					}
 
 					?><div class="clearfix spacing"><?php
-					if ( !isset($varnish_headers['X-Cacheable']) ) {	 ?>
+					if ( !isset( $varnish_headers['X-Cacheable'] ) || !isset( $varnish_headers['X-Varnish'] ) || !isset( $varnish_headers['X-Cache'] ) ) {
+						?>
 						<h2 class="spacing">Alas, no!</h2>
 						<p>Our robots were not find the "X-Varnish" header in the response from the server. That means Varnish is probably not running, which in turn means you actually may not be on DreamPress!</p>
 						<p>If you're sure you <em>are</em> on DreamPress, take the information below and send it in a support ticket to our awesome techs. That will help us debug things even faster!</p>
@@ -155,7 +156,7 @@
 					<h2>Scanner Results</h2>
 					<p>Our happy Robot Scanners found the following interesting information about your site.</p>
 					
-					<?php include_once( "code/robotscan.php" ); ?>
+					<?php include_once( 'code/robotscan.php' ); ?>
 
 			<?php
 			// No matter what, we're going to show the headers etc. right? Wrong! If it wasn't a valid URL, we shouldn't
@@ -163,9 +164,9 @@
 				?>
 
 				<p>&nbsp;</p>
-				
+
 				<h2>Technical Details</h2>
-				
+
 				<p>Here are some more gory details on the domain.</p>
 	
 				<table class="table-standard wordpress-comparison">
@@ -180,16 +181,19 @@
 					?>
 				</table>
 
+				<!--
+				// Currently we're disabling GTMetrix - it's not really that useful. Also it's not working
 				<p>&nbsp;</p>
 
 				<h2>GTMetrix Scan</h2>
 
-				<?php include( 'code/gtmetrix.php' ); ?>
+				<?php //include( 'code/gtmetrix.php' ); ?>
+				-->
 			</div>
 
 			<div class="section-cta box">
 				<h2><strong>Check a different URL</strong></h2>
-				<?php include_once( "template/button.php" ); ?>
+				<?php include_once( 'template/button.php' ); ?>
 			</div>
 			<?php
 			}
@@ -201,4 +205,4 @@
 	</section>
 
 <?php
-	include_once( "template/footer.php" );
+	include_once( 'template/footer.php' );
