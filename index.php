@@ -139,7 +139,7 @@
 					$x_age      = ( isset( $varnish_headers[ 'Age' ] ) && $varnish_headers[ 'Age' ] > 0 )?  true : false;
 
 					// If this is TRUE it's NOT Cachable
-					$not_cachable     = ( ( isset( $varnish_headers['X-Cacheable'] ) && strpos( $varnish_headers['X-Cacheable'] ,'NO') !== false ) || ( isset( $varnish_headers['Pragma'] ) && strpos( $varnish_headers['Pragma'] ,'no-cache') !== false )? true: false;
+					$not_cachable     = ( ( isset( $varnish_headers['X-Cacheable'] ) && strpos( $varnish_headers['X-Cacheable'] ,'NO') !== false ) || ( isset( $varnish_headers['Pragma'] ) && strpos( $varnish_headers['Pragma'] ,'no-cache') !== false ) )? true : false;
 					$cacheheaders_set = ( isset( $varnish_headers['X-Cacheable'] ) || isset( $varnish_headers['X-Varnish'] ) || isset( $varnish_headers['X-Cache'] ) || $x_via )? true : false;
 
 					if ( !$cacheheaders_set ) {
