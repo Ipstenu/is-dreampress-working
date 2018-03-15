@@ -21,11 +21,6 @@ if( !defined( 'ISDREAMPRESSWORKING' ) ) {
 	* We're going to do some extra checks to make sure this is WordPress and that everything's above board.
 	*/
 
-	$x_cachable = ( isset( $varnish_headers['X-Cacheable'] ) && strpos( $varnish_headers['X-Cacheable'] ,'YES') !== false )? true : false;
-	$x_varnish  = ( isset( $varnish_headers['X-Varnish'] ) )? true : false;
-	$x_via      = ( is_numeric( strpos( $varnish_headers['Via'], 'arnish' ) ) )? true : false;
-	$x_age      = ( isset( $varnish_headers[ 'Age' ] ) && $varnish_headers[ 'Age' ] > 0 )?  true : false;
-	
 	// VARNISH
 	if ( $x_cachable || $x_varnish || $x_via ) {
 	?><tr>

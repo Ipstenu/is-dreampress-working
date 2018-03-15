@@ -133,8 +133,12 @@
 
 					?><div class="clearfix spacing"><?php
 					// Check if the headers are set AND if the values are valid
-					$cacheheaders_set = ( isset( $varnish_headers['X-Cacheable'] ) || isset( $varnish_headers['X-Varnish'] ) || isset( $varnish_headers['X-Cache'] ) || is_numeric( strpos( $varnish_headers['Via'], 'arnish' ) ) )? true : false;
-					$cacheheaders_val = ( strpos( $varnish_headers['X-Cacheable'], 'yes' ) !== false || strpos( $varnish_headers['X-Cacheable'], 'YES' ) !== false && isset( $varnish_headers[ 'Age' ] ) && $varnish_headers[ 'Age' ] > 0 )?  true : false;
+					$x_cachable = ( isset( $varnish_headers['X-Cacheable'] ) && strpos( $varnish_headers['X-Cacheable'] ,'YES') !== false )? true : false;
+					$x_varnish  = ( isset( $varnish_headers['X-Varnish'] ) )? true : false;
+					$x_via      = ( is_numeric( strpos( $varnish_headers['Via'], 'arnish' ) ) )? true : false;
+					$x_age      = ( isset( $varnish_headers[ 'Age' ] ) && $varnish_headers[ 'Age' ] > 0 )?  true : false;
+
+					$cacheheaders_set = ( isset( $varnish_headers['X-Cacheable'] ) || isset( $varnish_headers['X-Varnish'] ) || isset( $varnish_headers['X-Cache'] ) || $x_via )? true : false;
 
 					if ( !$cacheheaders_set ) {
 						?>
@@ -142,7 +146,7 @@
 						<p>Our robots were not able to find the "X-Varnish" header in the response from the server. That means Varnish is probably not running, which in turn means you actually may not be on DreamPress!</p>
 						<p>If you're sure you <em>are</em> on DreamPress, take the information below and send it in a support ticket to our awesome techs. That will help us debug things even faster!</p>
 						<?php
-					} elseif ( $cacheheaders_val ) {
+					} elseif ( $x_cachable || $x_varnish || $x_via ) {
 						?>
 						<h2>Woot! YES!!</h2>
 						<p>Well, congratulations to you!</p>
