@@ -138,19 +138,20 @@
 					$x_via      = ( is_numeric( strpos( $varnish_headers['Via'], 'arnish' ) ) )? true : false;
 					$x_age      = ( isset( $varnish_headers[ 'Age' ] ) && $varnish_headers[ 'Age' ] > 0 )?  true : false;
 
+					// If this is TRUE it's NOT Cachable
+					$not_cachable     = ( ( isset( $varnish_headers['X-Cacheable'] ) && strpos( $varnish_headers['X-Cacheable'] ,'NO') !== false ) || ( isset( $varnish_headers['Pragma'] ) && strpos( $varnish_headers['Pragma'] ,'no-cache') !== false )? true: false;
 					$cacheheaders_set = ( isset( $varnish_headers['X-Cacheable'] ) || isset( $varnish_headers['X-Varnish'] ) || isset( $varnish_headers['X-Cache'] ) || $x_via )? true : false;
 
 					if ( !$cacheheaders_set ) {
 						?>
 						<h2 class="spacing">Alas, no!</h2>
-						<p>Our robots were not able to find the "X-Varnish" header in the response from the server. That means Varnish is probably not running, which in turn means you actually may not be on DreamPress!</p>
+						<p>Our robots were not able to find the correct Varnish headers on your server. That means Varnish is probably not running, which in turn means you actually may not be on DreamPress!</p>
 						<p>If you're sure you <em>are</em> on DreamPress, take the information below and send it in a support ticket to our awesome techs. That will help us debug things even faster!</p>
 						<?php
-					} elseif ( $x_cachable || $x_varnish || $x_via ) {
+					} elseif ( !$not_cachable && ( $x_cachable || $x_varnish ) ) {
 						?>
 						<h2>Woot! YES!!</h2>
-						<p>Well, congratulations to you!</p>
-						<p>Looks like your site is running with a Varnish cache.</p>
+						<p>Your site is running with a Varnish cache.</p>
 						<p>Want to know more about the site? Check the results below.</p>
 						<?php
 					} else { 
